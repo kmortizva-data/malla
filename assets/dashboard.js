@@ -20,6 +20,7 @@
   const courseVar = (code) => (code ? `var(--c-${code})` : "var(--k-holiday)");
   const mobile = matchMedia("(max-width: 760px)");
 
+  M.sync.config = hub.sync || false;                 // the private repository the phone syncs with (no token here)
   let notes = await M.store.notes();
   notes.days = notes.days || {}; notes.weeks = notes.weeks || {};
   let progress = await M.store.progress();
@@ -221,11 +222,11 @@
 
     const wnotes = notes.weeks[wk] || {};
     let n = `<div class="n-label">week</div><div class="n-week"><textarea data-kind="week" data-key="${wk}" ` +
-      `placeholder="Mandatory this week, every day (your OBLIGADO row): e.g. Lee Maestria">${M.esc(wnotes.mandatory || "")}</textarea></div>`;
+      `placeholder="Mandatory this week, every day (your OBLIGADO row): e.g. Lee Maestria">${M.esc(M.noteText(wnotes.mandatory))}</textarea></div>`;
     n += '<div class="n-label">to do</div>';
     for (const d of days) {
       const key = M.isoDate(d);
-      n += `<div class="n-day"><textarea data-kind="day" data-key="${key}" placeholder="${M.dow3(d)} ${d.getDate()}: pending…">${M.esc(notes.days[key] || "")}</textarea></div>`;
+      n += `<div class="n-day"><textarea data-kind="day" data-key="${key}" placeholder="${M.dow3(d)} ${d.getDate()}: pending…">${M.esc(M.noteText(notes.days[key]))}</textarea></div>`;
     }
     $("notes").innerHTML = n;
   }
@@ -234,7 +235,7 @@
   function renderAgenda(days, wk) {
     const wnotes = notes.weeks[wk] || {};
     let h = `<div class="day week-row"><div class="day-head"><span>Mandatory this week</span><span class="muted small">every day</span></div>` +
-      `<textarea data-kind="week" data-key="${wk}" placeholder="Mandatory this week, every day (your OBLIGADO row): e.g. Lee Maestria">${M.esc(wnotes.mandatory || "")}</textarea></div>`;
+      `<textarea data-kind="week" data-key="${wk}" placeholder="Mandatory this week, every day (your OBLIGADO row): e.g. Lee Maestria">${M.esc(M.noteText(wnotes.mandatory))}</textarea></div>`;
     const weekItems = events.filter((e) => e.precision === "week" && overlapsDay(e, days[0]));
     if (weekItems.length) h += `<div class="day-pills week-pills">${weekItems.map(pill).join("")}</div>`;
     for (const d of days) {
@@ -249,7 +250,7 @@
           `<span><b>${M.esc(e.activity)} · ${M.esc(shortName(e.course) || "")}</b><br><span class="muted small">${M.esc(e.location || "room tba")}${teachersOf(e)}</span></span></li>`).join("")}</ul>`;
       }
       if (allDay.length) h += `<div class="day-pills">${allDay.map(pill).join("")}</div>`;
-      h += `<textarea data-kind="day" data-key="${key}" placeholder="${M.dow3(d)} ${d.getDate()}: pending…">${M.esc(notes.days[key] || "")}</textarea></section>`;
+      h += `<textarea data-kind="day" data-key="${key}" placeholder="${M.dow3(d)} ${d.getDate()}: pending…">${M.esc(M.noteText(notes.days[key]))}</textarea></section>`;
     }
     $("agenda").innerHTML = h;
   }
@@ -266,12 +267,14 @@
     if (!dirty.size) return;
     const payload = { days: {}, weeks: {} };
     for (const [, t] of dirty) {
-      if (t.dataset.kind === "day") { payload.days[t.dataset.key] = t.value; notes.days[t.dataset.key] = t.value; }
-      else { payload.weeks[t.dataset.key] = { mandatory: t.value }; notes.weeks[t.dataset.key] = { ...(notes.weeks[t.dataset.key] || {}), mandatory: t.value }; }
+      if (t.dataset.kind === "day") payload.days[t.dataset.key] = t.value;
+      else payload.weeks[t.dataset.key] = { mandatory: t.value };
     }
     dirty.clear();
-    const where = await M.store.saveNotes(payload, notes);
+    const where = await M.store.saveNotes(payload);
+    notes = M.store.cache.notes || notes;
     $("save-state").textContent = M.store.savedLabel(where, new Date());
+    if (where === "github") renderSync();
   }
   window.addEventListener("beforeunload", () => { if (dirty.size) flush(); });
   $("week-prev").addEventListener("click", () => { monday.setDate(monday.getDate() - 7); renderWeek(); });
@@ -362,7 +365,7 @@
       let mods = "";
       if (cc) {
         mods = `<div class="mods">${cc.modules.map((m) => {
-          const st = ((progress.checkpoints || {})[c.code] || {})[String(m.n)] || [];
+          const st = M.states(((progress.checkpoints || {})[c.code] || {})[String(m.n)]);
           const total = m.checkpoint.length;
           const pct = total ? Math.round(100 * st.filter(Boolean).length / total) : 0;
           return `<i title="Module ${m.n}: ${M.esc(m.title)} · ${total ? pct + "% of checkpoints" : "no checkpoint"}"><b style="width:${pct}%"></b></i>`;
@@ -386,6 +389,50 @@
     }).join("");
   }
 
-  renderBanner(); renderStrip(); renderWeek(); renderTimeline(); renderCourses();
+  // ---------------------------------------------------------------- sync line (notes and progress between PC and phone)
+  const localTime = (iso) => (iso ? M.fmtTime(new Date(iso)) : "");
+  async function renderSync() {
+    const el = $("sync");
+    if (!el) return;
+    if (M.static) {
+      const cfg = M.sync.config;
+      if (!cfg || !cfg.repo) { el.innerHTML = ""; return; }
+      if (M.sync.ready()) {
+        const st = M.sync.state, last = st.last.notes || st.last.progress;
+        el.innerHTML = (st.error ? `<span class="bad">Sync error: ${M.esc(st.error)}</span>`
+          : `<span>Synced with the PC through GitHub (<code>${M.esc(cfg.repo)}</code>)${last ? " · " + localTime(last) : ""}</span>`) +
+          `<button class="btn btn-small btn-ghost" id="sync-off" type="button">Disconnect</button>`;
+        $("sync-off").addEventListener("click", () => { M.sync.setToken(null); renderSync(); });
+      } else {
+        el.innerHTML = `<form id="sync-form" class="sync-form"><span>Sync notes and progress with the PC: paste the GitHub token for <code>${M.esc(cfg.repo)}</code></span>` +
+          `<input type="password" id="sync-token" placeholder="paste the token here" autocomplete="off" spellcheck="false" aria-label="GitHub token">` +
+          `<button class="btn btn-small btn-primary" type="submit">Connect</button></form>`;
+        $("sync-form").addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          const v = $("sync-token").value.trim();
+          if (!v) return;
+          M.sync.setToken(v);
+          notes = await M.store.notes(); progress = await M.store.progress();
+          if (M.sync.state.error) { M.sync.setToken(null); M.toast("GitHub refused that token: " + M.esc(M.sync.state.error), 8000); }
+          else M.toast("Connected. Notes and progress now travel through GitHub.", 5000);
+          renderWeek(); renderCourses(); renderSync();
+        });
+      }
+      return;
+    }
+    try {
+      const s = await M.api("/api/sync");
+      if (!s.enabled) {
+        el.innerHTML = `<span class="muted">Notes stay on this PC. To sync with the phone, put a GitHub token for <code>${M.esc(s.repo || "the private repo")}</code> in <code>${M.esc(s.token_file)}</code> and restart the server.</span>`;
+      } else {
+        const last = s.last_pull.notes || s.last_push.notes;
+        el.innerHTML = s.error ? `<span class="bad">Sync error: ${M.esc(s.error)}</span>`
+          : `<span class="muted">Synced with the phone through GitHub (<code>${M.esc(s.repo)}</code>)${last ? " · " + localTime(last) : ""}</span>`;
+      }
+    } catch (e) { el.innerHTML = ""; }
+  }
+  M.sync.onchange = () => renderSync();
+
+  renderBanner(); renderStrip(); renderWeek(); renderTimeline(); renderCourses(); renderSync();
   setInterval(renderStrip, 30000);
 })();

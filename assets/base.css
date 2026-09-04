@@ -250,6 +250,13 @@ input[type=number], input[type=text] { font: inherit; padding: .45rem .6rem; bor
 .agenda textarea::placeholder { color: var(--ink-3); }
 .agenda .week-row textarea { min-height: 3rem; border-top: 0; margin-top: 0; }
 
+/* ------------------------------------------------------------ sync line under the week */
+.sync-line { margin-top: .6rem; font-size: .85rem; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: .5rem .8rem; align-items: center; }
+.sync-line .bad { color: var(--bad); }
+.sync-line:empty { display: none; }
+.sync-form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; width: 100%; }
+.sync-form input { flex: 1 1 14rem; font: inherit; font-size: .9rem; padding: .4rem .6rem; border: 1px solid var(--line-2); border-radius: var(--radius-s); background: var(--bg-2); color: var(--ink); }
+
 /* ------------------------------------------------------------ timeline */
 .timeline-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); padding-bottom: .3rem; }
 .timeline { display: grid; grid-template-columns: 130px 1fr; min-width: 980px; font-size: .78rem; }
