@@ -163,6 +163,17 @@ th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(-
 td { font-variant-numeric: tabular-nums; }
 th { color: var(--ink-3); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; vertical-align: bottom; }
 .doc-files { margin: -.2rem 0 1rem; }
+.shot { margin: 1rem 0; }
+.shot img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: #fff; }
+.shot figcaption { font-size: .82rem; color: var(--ink-3); margin-top: .35rem; }
+.adm-sources { --adm: var(--ink-3); }
+.adm-sources ul { margin: .2rem 0 .6rem; padding-left: 1.2rem; font-size: .9rem; }
+.adm-sources li { margin-bottom: .2rem; }
+.step-fill { margin: .2rem 0 0; }
+.step-fill summary { font-size: .88rem; }
+.step-fill ul { margin: .4rem 0 .2rem; padding-left: 1.2rem; font-size: .93rem; }
+.step-fill li { margin-bottom: .2rem; }
+.step-fill .shot { margin: .6rem 0 .2rem; }
 .field { display: flex; flex-direction: column; gap: .3rem; max-width: 22rem; margin: .6rem 0; }
 input[type=number], input[type=text] { font: inherit; padding: .45rem .6rem; border: 1px solid var(--line-2); border-radius: var(--radius-s);
   background: var(--bg); color: var(--ink); }
