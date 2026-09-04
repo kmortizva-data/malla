@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malla · HT2026</title>
+<link rel="stylesheet" href="assets/base.css">
+<meta name="robots" content="noindex, nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1B2126"><link rel="apple-touch-icon" href="assets/icon-180.png"><link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<script>(function(){try{var t=localStorage.getItem('malla.theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="dashboard static" style="--accent:var(--c-M7001K)">
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Dashboard">
+    <svg class="mark" viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M3 8h22M3 14h22M3 20h22"/><path d="M8 3v22M14 3v22M20 3v22"/>
+      </g>
+      <circle cx="14" cy="14" r="2.6" fill="var(--accent)"/>
+    </svg>
+    <span class="brand-name">Malla</span><span class="brand-sub">HT2026</span>
+  </a>
+  <nav class="nav" aria-label="Sections"><a class="nav-item active" href="index.html">Dashboard</a><a class="nav-item" href="M7001K/index.html">Simulation</a><a class="nav-item" href="M7008K/index.html">Geomet</a><a class="nav-item" href="M7003K/index.html">MinProc</a></nav>
+  <div class="topbar-actions">
+    
+    
+    <button class="btn btn-ghost btn-small" id="theme-btn" type="button" title="Light or dark">Theme</button>
+  </div>
+</header>
+<div class="eyebrow-bar"><span class="eyebrow">Semester 3 command centre</span><span class="clock" id="clock"></span></div>
+<div class="frame">
+
+<main class="page">
+<section id="banner" class="banner" hidden></section>
+
+<section class="strip" id="strip" aria-label="What is next">
+  <article class="card next" id="next-class"><div class="card-eyebrow">Next class</div><div class="next-body muted">Loading…</div></article>
+  <article class="card next" id="next-deadline"><div class="card-eyebrow">Next deadline</div><div class="next-body muted">Loading…</div></article>
+  <article class="card next" id="next-quiz"><div class="card-eyebrow">Next quiz checkpoint</div><div class="next-body muted">Loading…</div></article>
+  <article class="card next" id="plan-week"><div class="card-eyebrow">This week in the study plan</div><div class="next-body muted">Loading…</div></article>
+</section>
+
+<section class="week" id="week" aria-label="Week planner">
+  <header class="week-head">
+    <div class="week-nav">
+      <button id="week-prev" class="btn btn-ghost btn-small" type="button" aria-label="Previous week">‹</button>
+      <button id="week-today" class="btn btn-ghost btn-small" type="button">Today</button>
+      <button id="week-next" class="btn btn-ghost btn-small" type="button" aria-label="Next week">›</button>
+    </div>
+    <div class="week-titles"><h2 id="week-title">Week</h2><div class="week-sub muted" id="week-sub"></div></div>
+    <div class="save-state muted" id="save-state" aria-live="polite"></div>
+  </header>
+  <div class="grid-wrap" id="grid-wrap"><div class="grid" id="grid"></div></div>
+  <div class="notes" id="notes"></div>
+  <div class="agenda" id="agenda" hidden></div>
+</section>
+
+<section class="timeline-sec" aria-label="Semester timeline">
+  <div class="sec-head"><h2>Semester at a glance</h2><span class="muted">week 36 to week 2 · click a week to plan it</span></div>
+  <div class="timeline-wrap"><div class="timeline" id="timeline"></div></div>
+  <div class="legend" id="legend"></div>
+  <p class="muted small">On the phone: <a href="data/malla.ics" download="malla.ics">download malla.ics</a> and import it into Google Calendar (Settings → Import). Classes, seminars, derived deadlines and quiz-checkpoint weeks; regenerated on every build, derived dates say so in their title.</p>
+</section>
+
+<section class="courses" id="courses" aria-label="Courses">
+  <div class="sec-head"><h2>Courses</h2></div>
+  <div class="course-cards" id="course-cards"></div>
+</section>
+
+
+</main>
+</div>
+<footer class="foot">Phone copy of Malla. Folders, notes sync and the schedule refresh live on the PC copy; notes and quiz attempts made here stay on this device. <span id="foot-built"></span></footer>
+<div id="toast" class="toast" hidden></div>
+<script>window.MALLA_PREFIX="";window.MALLA_STATIC=true;window.MALLA_NODE=null;</script>
+<script src="assets/app.js"></script>
+<script src="assets/dashboard.js"></script>
+</body>
+</html>

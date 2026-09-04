@@ -1,0 +1,22 @@
+{
+  "name": "Malla \u00b7 HT2026",
+  "short_name": "Malla",
+  "description": "Semester 3 command centre",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1B2126",
+  "theme_color": "#1B2126",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
