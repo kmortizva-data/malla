@@ -163,6 +163,8 @@ th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(-
 td { font-variant-numeric: tabular-nums; }
 th { color: var(--ink-3); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; vertical-align: bottom; }
 .doc-files { margin: -.2rem 0 1rem; }
+.king-row .card-eyebrow { margin: 0 .4rem 0 0; align-self: center; }
+.tag.king { text-transform: none; letter-spacing: 0; font-size: .8rem; margin: .1rem .2rem .1rem 0; }
 .shot { margin: 1rem 0; }
 .shot img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: #fff; }
 .shot figcaption { font-size: .82rem; color: var(--ink-3); margin-top: .35rem; }

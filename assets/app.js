@@ -280,9 +280,10 @@
     if (!b) return;
     ev.preventDefault();
     const path = b.dataset.path, mode = b.dataset.mode || "auto";
+    const page = b.dataset.page ? +b.dataset.page : undefined;
     b.disabled = true;
     try {
-      const r = await M.api("/api/open", { path, mode });
+      const r = await M.api("/api/open", { path, mode, page });
       M.toast(`Opened (${esc(r.action)})`);
     } catch (e) {
       M.toast(`Could not open: ${esc(e.message)}<br><code>${esc(path)}</code>`, 8000);
