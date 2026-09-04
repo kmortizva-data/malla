@@ -410,6 +410,14 @@
     }));
   }
 
+  // ---- tables wider than the screen say so ----------------------------------
+  const wraps = document.querySelectorAll(".table-wrap");
+  if (wraps.length) {
+    const markScroll = () => wraps.forEach((w) => w.classList.toggle("scrolls", w.scrollWidth > w.clientWidth + 1));
+    markScroll();
+    window.addEventListener("resize", markScroll);
+  }
+
   // ---- task lists inside documents (this browser only) ----------------------
   const doc = document.querySelector(".doc[data-doc]");
   if (doc) {

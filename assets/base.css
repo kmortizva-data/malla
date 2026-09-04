@@ -156,9 +156,13 @@ a.card:hover { text-decoration: none; border-color: var(--accent); }
 .checks label.check { display: flex; gap: .6rem; align-items: flex-start; cursor: pointer; }
 .checks input { margin-top: .3rem; accent-color: var(--accent); }
 .table-wrap { overflow-x: auto; }
+.table-wrap.scrolls::before { content: "swipe sideways for the rest of the table →"; display: block; font-size: .68rem; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ink-3); padding: .2rem 0 .3rem; }
 table { border-collapse: collapse; width: 100%; font-size: .93rem; }
 th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { color: var(--ink-3); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+td { font-variant-numeric: tabular-nums; }
+th { color: var(--ink-3); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; vertical-align: bottom; }
+.doc-files { margin: -.2rem 0 1rem; }
 .field { display: flex; flex-direction: column; gap: .3rem; max-width: 22rem; margin: .6rem 0; }
 input[type=number], input[type=text] { font: inherit; padding: .45rem .6rem; border: 1px solid var(--line-2); border-radius: var(--radius-s);
   background: var(--bg); color: var(--ink); }
@@ -367,5 +371,7 @@ details.fold summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
   .pager-next { text-align: left; }
   .pager-empty { display: none; }
   .day-ev { grid-template-columns: 1fr; gap: .1rem; }
+  .doc table { font-size: .85rem; }
+  .doc th, .doc td { padding: .35rem .45rem; }
 }
 @media (prefers-reduced-motion: no-preference) { .btn, .card, .nav-item { transition: border-color .15s, background .15s; } }
