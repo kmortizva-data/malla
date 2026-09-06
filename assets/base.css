@@ -168,6 +168,31 @@ th { color: var(--ink-3); font-weight: 600; font-size: .78rem; text-transform: u
 .shot { margin: 1rem 0; }
 .shot img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: #fff; }
 .shot figcaption { font-size: .82rem; color: var(--ink-3); margin-top: .35rem; }
+/* ------------------------------------------------------------ old exams: bank and review */
+.exam-q { margin: .9rem 0; border-left: 4px solid var(--k-quiz); }
+.exam-q .exam-title { margin: .2rem 0 .5rem; font-size: 1rem; color: var(--ink-2); }
+.exam-text { font-size: 1rem; }
+.exam-text p, .exam-stem { margin-bottom: .6rem; }
+.exam-stem { font-style: italic; color: var(--ink-2); }
+.exam-figure { border-left: 3px solid var(--line-2); padding-left: .6rem; }
+.tag.topic { border-color: var(--k-quiz); color: var(--k-quiz); }
+.exam-q details.fold { margin: .6rem 0 .2rem; }
+.exam-q details.official { border-color: var(--ok); }
+.exam-q details.official summary { color: var(--ok); }
+.exam-q details.answer { border-color: var(--accent); }
+.exam-q .pending { padding: .3rem .8rem; border: 1px dashed var(--line-2); border-radius: var(--radius-s); }
+.exam-q .related { margin-top: .5rem; }
+.paper { margin-bottom: 1.6rem; }
+.exam-list li { padding: .3rem 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+.topic-card { border-top: 4px solid var(--k-quiz); }
+.adm-pattern { --adm: var(--k-quiz); }
+.adm-pattern ol, .adm-pattern p { font-size: .97rem; }
+.variant { margin-bottom: 1.2rem; }
+.variant .tasklist { margin: -.2rem 0 0 .4rem; }
+.review-doc { max-width: 84ch; }
+.diagram { margin: 1rem 0; background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius); padding: .6rem; }
+.diagram svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.diagram figcaption { font-size: .82rem; color: var(--ink-3); margin-top: .35rem; }
 .adm-sources { --adm: var(--ink-3); }
 .adm-sources ul { margin: .2rem 0 .6rem; padding-left: 1.2rem; font-size: .9rem; }
 .adm-sources li { margin-bottom: .2rem; }

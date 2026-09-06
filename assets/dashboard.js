@@ -377,6 +377,7 @@
       const actions = cc
         ? `<div class="actions">` +
           (M.static || !cc.folder ? "" : `<button class="btn btn-small open" data-path="${M.esc(cc.folder)}" type="button">Open folder</button>`) +
+          (M.static || !cc.king_file ? "" : `<button class="btn btn-small open" data-path="${M.esc(cc.king_file)}" type="button">King (PDF)</button>`) +
           `<a class="btn btn-small btn-ghost" href="${P + c.code}/index.html">Course page</a>` +
           (last && last.kind !== "course" ? `<a class="btn btn-small btn-primary" href="${P + last.url}">Continue</a>` : "") +
           (c.canvas_url ? `<a class="btn btn-small btn-ghost" href="${c.canvas_url}" target="_blank" rel="noopener">Canvas</a>` : "") + "</div>"
