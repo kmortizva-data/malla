@@ -428,3 +428,8 @@ math { font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", "Noto 
 math .math-err, span.math-err { color: var(--bad); font-family: var(--mono); font-size: .9em; }
 math .mbold, math .mbold * { font-weight: 700; }
 .math-block math + math { margin-top: .35rem; }
+
+/* the door to a module's lesson */
+.lesson-card { border-left: 4px solid var(--accent); }
+.lesson-card h3 { margin: .15rem 0 .45rem; font-size: 1.2rem; }
+.lesson-card h3 a { text-decoration: none; }
