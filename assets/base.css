@@ -420,3 +420,11 @@ details.fold summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
 .topic-brief ol { padding-left: 1.25rem; font-size: .95rem; }
 .topic-brief ol li { margin: .3rem 0; }
 .module-exams .exam-q { margin: .9rem 0; }
+
+/* formulas: MathML rendered by the browser, no fonts to download (Cambria Math on Windows) */
+math { font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", "Noto Sans Math", serif; font-size: 1.05em; color: inherit; }
+.math-block { overflow-x: auto; overflow-y: hidden; margin: .5rem 0 .9rem; padding: .2rem 0; text-align: center; }
+.math-block math { margin: 0; font-size: 1.15em; }
+math .math-err, span.math-err { color: var(--bad); font-family: var(--mono); font-size: .9em; }
+math .mbold, math .mbold * { font-weight: 700; }
+.math-block math + math { margin-top: .35rem; }
