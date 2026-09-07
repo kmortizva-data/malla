@@ -413,3 +413,10 @@ details.fold summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
   .doc th, .doc td { padding: .35rem .45rem; }
 }
 @media (prefers-reduced-motion: no-preference) { .btn, .card, .nav-item { transition: border-color .15s, background .15s; } }
+
+/* module pages of a course without Canvas modules: the exam-pattern cards and the question list */
+.two-col.topics { align-items: start; }
+.topic-brief { border-top: 4px solid var(--k-quiz); }
+.topic-brief ol { padding-left: 1.25rem; font-size: .95rem; }
+.topic-brief ol li { margin: .3rem 0; }
+.module-exams .exam-q { margin: .9rem 0; }
