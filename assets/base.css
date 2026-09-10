@@ -367,6 +367,11 @@ label.task input:checked + span { color: var(--ink-3); text-decoration: line-thr
 .output pre { margin: 0; background: transparent; }
 details.fold { border: 1px solid var(--line); border-radius: var(--radius-s); padding: .4rem .8rem; margin: .8rem 0; }
 details.fold summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
+details.fold[open] > summary { color: var(--ink); margin-bottom: .3rem; }
+details.fold > ul, details.fold > p { margin-top: .3rem; }
+details.fold-shot { margin: .5rem 0 .2rem; padding: .3rem .7rem; border-style: dashed; }
+details.fold-shot summary { font-size: .85rem; font-weight: 500; }
+details.fold-shot .shot { margin: .5rem 0 .2rem; }
 
 /* ------------------------------------------------------------ quiz */
 .quiz-app { max-width: 820px; }
