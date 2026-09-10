@@ -158,6 +158,8 @@ a.card:hover { text-decoration: none; border-color: var(--accent); }
 .table-wrap { overflow-x: auto; }
 .table-wrap.scrolls::before { content: "swipe sideways for the rest of the table →"; display: block; font-size: .68rem; text-transform: uppercase;
   letter-spacing: .08em; color: var(--ink-3); padding: .2rem 0 .3rem; }
+.math-block.scrolls::before { content: "swipe sideways for the rest of the formula →"; display: block; font-size: .68rem; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ink-3); padding: .2rem 0 .3rem; text-align: left; }
 table { border-collapse: collapse; width: 100%; font-size: .93rem; }
 th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
 td { font-variant-numeric: tabular-nums; }

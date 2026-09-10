@@ -411,8 +411,8 @@
     }));
   }
 
-  // ---- tables wider than the screen say so ----------------------------------
-  const wraps = document.querySelectorAll(".table-wrap");
+  // ---- tables and display formulas wider than the screen say so ------------
+  const wraps = document.querySelectorAll(".table-wrap, .math-block");
   if (wraps.length) {
     const markScroll = () => wraps.forEach((w) => w.classList.toggle("scrolls", w.scrollWidth > w.clientWidth + 1));
     markScroll();
