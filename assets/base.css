@@ -370,6 +370,8 @@ details.fold summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
 details.fold[open] > summary { color: var(--ink); margin-bottom: .3rem; }
 details.fold > ul, details.fold > p { margin-top: .3rem; }
 details.fold-shot { margin: .5rem 0 .2rem; padding: .3rem .7rem; border-style: dashed; }
+.local { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem .9rem; margin: .8rem 0; }
+.local-tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: .3rem; }
 details.fold-shot summary { font-size: .85rem; font-weight: 500; }
 details.fold-shot .shot { margin: .5rem 0 .2rem; }
 
