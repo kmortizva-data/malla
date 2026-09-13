@@ -483,3 +483,30 @@ math .mbold, math .mbold * { font-weight: 700; }
 .tr-timeline li.final { background: color-mix(in oklab, var(--ok) 9%, transparent); border-radius: var(--radius-s); }
 .tr-timeline li.final .run-n { background: var(--ok); color: var(--bg); }
 @media (prefers-reduced-motion: reduce) { .tr-bar i { transition: none; } }
+
+/* ------------------------------------------------------------ settings board of an assignment trainer */
+.tr-board { margin-top: 2rem; }
+.tr-board h2 { margin: .1rem 0 .3rem; text-wrap: balance; }
+.board-legend i.lg-good { background: color-mix(in oklab, var(--ok) 35%, var(--bg-2)); }
+.board-legend i.lg-bad { background: color-mix(in oklab, var(--bad) 35%, var(--bg-2)); }
+.board-legend i.lg-changed { background: transparent; box-shadow: inset 0 0 0 2px var(--accent); }
+.board-wrap { overflow-x: auto; margin: .6rem 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); }
+.board { border-collapse: separate; border-spacing: 0; font-size: .8rem; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.board th, .board td { padding: .4rem .5rem; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; vertical-align: top; }
+.board thead th { background: var(--bg-3); color: var(--ink-2); font-weight: 600; vertical-align: bottom; }
+.board thead .b-group { text-align: center; font-size: .66rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+.board .b-run { position: sticky; left: 0; z-index: 1; min-width: 13rem; max-width: 15rem; background: var(--bg-2); color: var(--ink); font-weight: 500; }
+.board thead .b-run { background: var(--bg-3); z-index: 2; }
+.board .b-n { display: inline-block; min-width: 1.9rem; font-family: var(--mono); font-weight: 700; color: var(--ink-3); }
+.board td.good { background: color-mix(in oklab, var(--ok) 22%, var(--bg-2)); }
+.board td.bad { background: color-mix(in oklab, var(--bad) 22%, var(--bg-2)); }
+.board td.changed { box-shadow: inset 0 0 0 2px var(--accent); font-weight: 700; color: var(--ink); }
+.board-rules { margin: .4rem 0 .2rem; padding-left: 1.1rem; }
+.board-rules li { margin-bottom: .35rem; }
+.board th, .board td { text-transform: none; letter-spacing: normal; white-space: nowrap; }
+.board thead th { white-space: normal; min-width: 5.5rem; font-size: .74rem; line-height: 1.25; }
+.board thead .b-group { text-transform: uppercase; letter-spacing: .08em; min-width: 0; }
+.board .wide { white-space: normal; min-width: 12rem; }
+.board tbody .b-run { white-space: normal; font-size: .8rem; }
+.board-legend i.lg-good { background: color-mix(in oklab, var(--ok) 50%, var(--bg-2)); }
+.board-legend i.lg-bad { background: color-mix(in oklab, var(--bad) 50%, var(--bg-2)); }
