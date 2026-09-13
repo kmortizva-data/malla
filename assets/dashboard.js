@@ -371,6 +371,13 @@
           return `<i title="Module ${m.n}: ${M.esc(m.title)} · ${total ? pct + "% of checkpoints" : "no checkpoint"}"><b style="width:${pct}%"></b></i>`;
         }).join("")}</div>`;
       }
+      let track = "";
+      if (cc && cc.tracker && M.tracker) {     // how far along: the tracker's steps plus the ticks kept with the progress
+        const ticks = ((progress.tracker || {})[c.code]) || {};
+        const pc = (k) => (k.total ? Math.round((100 * k.done) / k.total) : 0);
+        const a = M.tracker.count(cc.tracker, ticks, "assignment"), x = M.tracker.count(cc.tracker, ticks, "example");
+        track = `<div class="meta small pg-dash"><a href="${P + cc.tracker.url}">Assignments ${pc(a)} % · Examples ${pc(x)} %</a></div>`;
+      }
       const last = cc ? M.lastNode(c.code) : null;
       const resume = last && last.kind !== "course"
         ? `<div class="meta small">Last opened: <a href="${P + last.url}">${M.esc(last.title)}</a></div>` : "";
@@ -384,7 +391,7 @@
         : '<p class="muted small">Not set up yet. Comes after Simulation is running.</p>';
       return `<article class="card course-card${cc ? "" : " inactive"}" style="--accent:${courseVar(c.code)}">` +
         `<div class="card-eyebrow">${M.esc(c.code)} · ${M.esc(c.teacher || "")}</div>` +
-        `<h3>${cc ? `<a href="${P + c.code}/index.html">${M.esc(c.name)}</a>` : M.esc(c.name)}</h3>${mods}` +
+        `<h3>${cc ? `<a href="${P + c.code}/index.html">${M.esc(c.name)}</a>` : M.esc(c.name)}</h3>${mods}${track}` +
         `<div class="meta small">${next ? `Next: ${M.esc(next.activity)} · ${M.fmtDay(next.s)} ${M.fmtTime(next.s)} · ${M.esc(next.location || "")}` : "No upcoming session in TimeEdit."}</div>` +
         `<div class="meta small">${nd ? `Deadline: ${M.esc(nd.title)} · ${M.fmtWhen(nd.start, nd.precision)}` : (cc ? "No deadline derived yet." : "")}</div>${resume}${actions}</article>`;
     }).join("");

@@ -54,7 +54,7 @@
   const EPOCH = "2000-01-01T00:00:00Z";
   const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
   const emptyOf = (kind) => (kind === "notes" ? { version: 2, days: {}, weeks: {} }
-    : { version: 2, checkpoints: {}, quiz_attempts: [], flags: [] });
+    : { version: 2, checkpoints: {}, quiz_attempts: [], flags: [], tracker: {} });
   M.noteText = (e) => (typeof e === "string" ? e : (e && e.text) || "");
   M.states = (e) => (Array.isArray(e) ? e : (e && e.states) || []);
   function upgrade(kind, data) {
@@ -112,10 +112,43 @@
       const key = `${f.at}|${f.question_id}`;
       if (!seenF.has(key)) { seenF.add(key); out.flags.push(f); }
     }
+    for (const course of new Set([...Object.keys(a.tracker || {}), ...Object.keys(b.tracker || {})])) {   // ticked steps: newest wins
+      const ca = (a.tracker || {})[course] || {}, cb = (b.tracker || {})[course] || {};
+      out.tracker[course] = {};
+      for (const item of new Set([...Object.keys(ca), ...Object.keys(cb)])) {
+        const ia = ca[item] || {}, ib = cb[item] || {};
+        out.tracker[course][item] = {};
+        for (const s of new Set([...Object.keys(ia), ...Object.keys(ib)])) out.tracker[course][item][s] = newer(ia[s], ib[s]);
+      }
+    }
     return out;
   }
   const mergeOf = (kind, a, b) => (kind === "notes" ? mergeNotes(a, b) : mergeProgress(a, b));
   M.merge = mergeOf;
+
+  // ---- progress tracker arithmetic: the progress page, the course page and the dashboard (mirrors build.py) ----
+  // Steps done over the steps that apply. A step of the student's counts as its tick says when a tick exists, and as
+  // tracker.json says otherwise; Malla's steps count only as tracker.json says.
+  M.tracker = {
+    count(data, ticks, kind, itemId) {
+      const out = { done: 0, total: 0, malla: { done: 0, total: 0 }, you: { done: 0, total: 0 } };
+      for (const item of data.items || []) {
+        if (itemId ? item.id !== itemId : (item.kind !== kind || item.counted === false)) continue;
+        for (const s of (data.step_types || {})[item.kind] || []) {
+          const state = ((item.steps || {})[s.id] || {}).state;
+          if (state === "na") continue;
+          let done = state === "done";
+          if (s.owner === "you") {
+            const tick = ((ticks || {})[item.id] || {})[s.id];
+            if (tick) done = !!tick.done;
+          }
+          out.total++; out[s.owner].total++;
+          if (done) { out.done++; out[s.owner].done++; }
+        }
+      }
+      return out;
+    },
+  };
 
   // ---- localStorage ---------------------------------------------------------
   const LS = {
@@ -259,6 +292,11 @@
       } else if (op.op === "flag") {
         const flag = { ...op }; delete flag.op;
         (p.flags = p.flags || []).push(flag);
+      } else if (op.op === "set_step") {
+        p.tracker = p.tracker || {};
+        const byCourse = (p.tracker[op.course] = p.tracker[op.course] || {});
+        const byItem = (byCourse[op.item] = byCourse[op.item] || {});
+        byItem[op.step] = { done: !!op.value, at: nowIso() };
       }
       this.cache.progress = p;
       LS.set("malla.progress", p);

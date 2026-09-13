@@ -510,3 +510,36 @@ math .mbold, math .mbold * { font-weight: 700; }
 .board tbody .b-run { white-space: normal; font-size: .8rem; }
 .board-legend i.lg-good { background: color-mix(in oklab, var(--ok) 50%, var(--bg-2)); }
 .board-legend i.lg-bad { background: color-mix(in oklab, var(--bad) 50%, var(--bg-2)); }
+
+/* ---- progress tracker: M7001K/progress.html, the course page tiles, the dashboard line ---------------- */
+.pg-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.2rem 0; align-items: start; }
+.pg-tile .pg-big { font-size: 2.4rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--accent); margin: .2rem 0 .45rem; }
+.pg-bar { height: 8px; margin: .4rem 0; }
+.pg-course .pg-more { grid-column: 1 / -1; margin: 0; }
+.pg-list { display: grid; gap: .8rem; }
+.pg-module { margin: 1.1rem 0 .1rem; }
+.pg-item .pg-head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; }
+.pg-item h3 { margin: 0; font-size: 1.02rem; text-wrap: balance; }
+.pg-pct { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pg-meta { color: var(--ink-3); margin: .1rem 0 .3rem; }
+.pg-meta a { color: inherit; text-decoration: underline; }
+.pg-steps { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .3rem; }
+.pg-step { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; column-gap: .5rem; align-items: baseline; font-size: .92rem; }
+.pg-step label { display: contents; cursor: pointer; }
+.pg-step input { margin: 0; justify-self: center; accent-color: var(--ok); }
+.pg-mark { text-align: center; color: var(--ink-3); }
+.pg-state { font-size: .78rem; color: var(--ink-3); white-space: nowrap; }
+.pg-note { grid-column: 2 / -1; font-size: .8rem; color: var(--ink-3); }
+.pg-step.done .pg-mark, .pg-step.done .pg-state, .pg-step.owner-you.done .pg-label { color: var(--ok); }
+.pg-step.active .pg-mark, .pg-step.active .pg-state { color: var(--warn); }
+.pg-step.blocked .pg-mark, .pg-step.blocked .pg-state { color: var(--bad); }
+.pg-step.na { opacity: .6; }
+.pg-item.uncounted { border-style: dashed; }
+.pg-foot { margin-top: 1.5rem; }
+.pg-dash a { color: inherit; }
+
+/* ---- a page of ranked runs (M7001K/boards/<id>.html): the figures above the boards ---- */
+.bp-figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1rem; margin: 1.2rem 0; }
+.bp-figures figure { margin: 0; }
+/* a wide board scrolls inside its frame: without this its table's width widened the page column (1500 px in a 1009 px window) */
+.board-wrap { contain: inline-size; }
