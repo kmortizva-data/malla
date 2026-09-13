@@ -442,3 +442,44 @@ math .mbold, math .mbold * { font-weight: 700; }
 .lesson-card { border-left: 4px solid var(--accent); }
 .lesson-card h3 { margin: .15rem 0 .45rem; font-size: 1.2rem; }
 .lesson-card h3 a { text-decoration: none; }
+
+/* ------------------------------------------------------------ assignment trainer (PC copy of Malla) */
+.trainer-app { max-width: 880px; }
+.trainer-app .quiz-bar { align-items: center; gap: .6rem; flex-wrap: wrap; font-family: var(--font); font-size: .86rem; }
+.tr-overall { display: flex; align-items: center; gap: .8rem; margin: .2rem 0 .4rem; font-family: var(--mono); font-size: .88rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tr-overall .tr-bar { flex: 1; height: 10px; }
+.tr-bar { height: 6px; border-radius: 999px; background: var(--bg-4); overflow: hidden; }
+.tr-bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: inherit; transition: width .4s ease; }
+.tr-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .8rem; margin-top: 1rem; }
+.tr-mod { display: flex; flex-direction: column; gap: .4rem; }
+.tr-mod h3 { margin: 0; font-size: 1.05rem; text-wrap: balance; }
+.tr-mod p { margin: 0; }
+.tr-mod .actions { margin-top: auto; padding-top: .2rem; }
+.tr-n { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+.tr-mod .stat { font-family: var(--mono); font-size: .8rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tr-mod.complete { border-color: color-mix(in oklab, var(--ok) 50%, var(--line)); }
+.tr-mod.complete .tr-n { color: var(--ok); font-weight: 700; }
+.tr-mod.complete .tr-bar i { background: var(--ok); }
+.tr-mod.locked { border-style: dashed; box-shadow: none; background: transparent; }
+.tr-where { margin-bottom: .7rem; padding: .7rem 1rem; }
+.where-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .3rem .9rem; margin: 0; }
+.where-grid dt { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); padding-top: .2rem; }
+.where-grid dd { margin: 0; font-family: var(--mono); font-size: .86rem; overflow-wrap: anywhere; }
+.feedback .given { font-family: var(--mono); font-size: .88rem; margin: .15rem 0; }
+.feedback .hint { margin: .15rem 0 .4rem; font-weight: 600; color: var(--warn); }
+.feedback .remember { margin-top: .55rem; padding-top: .45rem; border-top: 1px dashed var(--line-2); font-weight: 600; }
+.tr-done-head { display: flex; align-items: center; gap: .8rem; margin-bottom: .3rem; }
+.tr-done-head h2 { margin: 0; text-wrap: balance; }
+.tr-done-mark { flex: none; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--ok); color: var(--bg); display: inline-flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 700; }
+.tr-done-score { font-family: var(--mono); font-size: 1.25rem; margin: .3rem 0 .6rem; font-variant-numeric: tabular-nums; }
+.tr-missed li { margin-bottom: .55rem; }
+.tr-timeline { list-style: none; padding: 0; margin: .6rem 0 1rem; }
+.tr-timeline li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); column-gap: .8rem; row-gap: .15rem; padding: .6rem .4rem; border-top: 1px solid var(--line); }
+.tr-timeline li > div { grid-column: 2; }
+.tr-timeline .run-n { grid-column: 1; grid-row: 1 / span 3; align-self: start; width: 2rem; height: 2rem; border-radius: 50%; background: var(--bg-3); color: var(--ink-2); display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: .85rem; }
+.tr-timeline .tr-when { font-family: var(--mono); font-size: .78rem; color: var(--ink-3); margin-right: .3rem; }
+.tr-timeline .read { color: var(--ink-2); }
+.tr-timeline .lesson::before { content: "Lesson · "; color: var(--ink-3); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }
+.tr-timeline li.final { background: color-mix(in oklab, var(--ok) 9%, transparent); border-radius: var(--radius-s); }
+.tr-timeline li.final .run-n { background: var(--ok); color: var(--bg); }
+@media (prefers-reduced-motion: reduce) { .tr-bar i { transition: none; } }
