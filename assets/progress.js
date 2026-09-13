@@ -14,7 +14,7 @@
     root.querySelectorAll("[data-pct]").forEach((n) => { n.textContent = p + " %"; });
     root.querySelectorAll("[data-bar]").forEach((n) => { n.style.width = p + "%"; });
     root.querySelectorAll("[data-split]").forEach((n) => {
-      n.textContent = `Malla ${c.malla.done} of ${c.malla.total} · You ${c.you.done} of ${c.you.total}`;
+      n.textContent = `Malla has done ${c.malla.done} of its ${c.malla.total} steps, and you have done ${c.you.done} of your ${c.you.total}.`;
     });
   }
 
