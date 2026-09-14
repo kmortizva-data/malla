@@ -93,10 +93,12 @@
       </div>`;
     });
     const unlocked = allComplete();
+    const tlTitle = data.timeline_title || "How we got to the optimum";
+    const tlBlurb = data.timeline_blurb || ("The " + (data.timeline || []).length + " runs in order, one line each: what changed, what it showed, what it taught.");
     cards.push(`<div class="card tr-mod ${unlocked ? "complete" : "locked"}">
         <div class="tr-n">The end</div>
-        <h3>How we got to the optimum</h3>
-        <p class="muted small">The ${(data.timeline || []).length} runs in order, one line each: what changed, what it showed, what it taught.</p>
+        <h3>${esc(tlTitle)}</h3>
+        <p class="muted small">${esc(tlBlurb)}</p>
         <div class="actions">${unlocked
           ? '<button class="btn btn-small btn-primary" type="button" id="tr-open-final">Open</button>'
           : `<span class="muted small">Opens when the ${modules.length} modules are complete</span>`}</div>
@@ -226,7 +228,7 @@
       <div class="actions">
         ${s.missed.length ? '<button class="btn btn-primary" type="button" data-act="retry">Retry the missed ones</button>' : ""}
         ${nextMod ? `<button class="btn${s.missed.length ? "" : " btn-primary"}" type="button" data-act="next">Next: ${esc(nextMod.title)}</button>` : ""}
-        ${!nextMod && allComplete() ? `<button class="btn${s.missed.length ? "" : " btn-primary"}" type="button" data-act="final">How we got to the optimum</button>` : ""}
+        ${!nextMod && allComplete() ? `<button class="btn${s.missed.length ? "" : " btn-primary"}" type="button" data-act="final">${esc(data.timeline_title || "How we got to the optimum")}</button>` : ""}
         <button class="btn btn-ghost" type="button" data-act="map">Back to the map</button>
       </div>`;
     const acts = { retry: () => startModule(m, true), next: () => startModule(nextMod, false), final: renderFinal, map: () => renderHome() };
@@ -246,7 +248,7 @@
     card.innerHTML = `<div class="card-eyebrow">All ${modules.length} modules complete</div>
       <div class="tr-done-head"><span class="tr-done-mark" aria-hidden="true">✓</span><h2>You finished the ${esc(data.title)}</h2></div>
       <p>${right} of ${total} stations right the first time. ${esc(data.outro || "")}</p>
-      <h3>How we got to the optimum, run by run</h3>
+      <h3>${esc(data.timeline_heading || "How we got to the optimum, run by run")}</h3>
       <ol class="tr-timeline">${tl}</ol>
       <div class="actions"><button class="btn btn-ghost" type="button" data-act="map">Back to the map</button>
         <button class="btn btn-ghost" type="button" data-act="reset">Reset all progress</button></div>`;
