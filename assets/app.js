@@ -313,18 +313,19 @@
   };
 
   // ---- open on disk (delegated; never rendered on the phone copy) ----------
+  // a data-ref button names last year's material by its catalogue id: the server looks the file up
   document.addEventListener("click", async (ev) => {
-    const b = ev.target.closest(".open[data-path]");
+    const b = ev.target.closest(".open[data-path], .open[data-ref]");
     if (!b) return;
     ev.preventDefault();
-    const path = b.dataset.path, mode = b.dataset.mode || "auto";
+    const ref = b.dataset.ref, path = b.dataset.path, mode = b.dataset.mode || "auto";
     const page = b.dataset.page ? +b.dataset.page : undefined;
     b.disabled = true;
     try {
-      const r = await M.api("/api/open", { path, mode, page });
+      const r = await M.api("/api/open", ref ? { ref, page } : { path, mode, page });
       M.toast(`Opened (${esc(r.action)})`);
     } catch (e) {
-      M.toast(`Could not open: ${esc(e.message)}<br><code>${esc(path)}</code>`, 8000);
+      M.toast(`Could not open: ${esc(e.message)}<br><code>${esc(ref || path)}</code>`, 8000);
     } finally { b.disabled = false; }
   });
 
