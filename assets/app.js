@@ -128,25 +128,81 @@
 
   // ---- progress tracker arithmetic: the progress page, the course page and the dashboard (mirrors build.py) ----
   // Steps done over the steps that apply. A step of the student's counts as its tick says when a tick exists, and as
-  // tracker.json says otherwise; Malla's steps count only as tracker.json says.
+  // tracker.json says otherwise; Malla's steps count only as tracker.json says. On the PC copy a step can carry a
+  // Canvas reading (step.at): a tick older than that reading no longer overrides it.
+  const tickWins = (tick, at) => !!tick && (!at || new Date(tick.at || 0) > new Date(at));
   M.tracker = {
+    tickWins,
     count(data, ticks, kind, itemId) {
       const out = { done: 0, total: 0, malla: { done: 0, total: 0 }, you: { done: 0, total: 0 } };
       for (const item of data.items || []) {
         if (itemId ? item.id !== itemId : (item.kind !== kind || item.counted === false)) continue;
         for (const s of (data.step_types || {})[item.kind] || []) {
-          const state = ((item.steps || {})[s.id] || {}).state;
-          if (state === "na") continue;
-          let done = state === "done";
+          const step = (item.steps || {})[s.id] || {};
+          if (step.state === "na") continue;
+          let done = step.state === "done";
           if (s.owner === "you") {
             const tick = ((ticks || {})[item.id] || {})[s.id];
-            if (tick) done = !!tick.done;
+            if (tickWins(tick, step.at)) done = !!tick.done;
           }
           out.total++; out[s.owner].total++;
           if (done) { out.done++; out[s.owner].done++; }
         }
       }
       return out;
+    },
+  };
+
+  // ---- the queue (CLAUDE.md block 60): the queue page and the dashboard's "Up next" (mirrors malla_queue.py) ----
+  // An item leaves the queue when its closing step is done; until then its date puts it in a group, worked out
+  // against today, so the page is right on any day without a rebuild.
+  const DAY_MS = 86400000;
+  M.queue = {
+    view(item, progressTicks, now) {
+      const ticks = (((progressTicks || {})[item.course]) || {})[item.id] || {};
+      const steps = item.steps.map((s) => {
+        let done = s.state === "done";
+        if (s.owner === "you" && tickWins(ticks[s.id], s.at)) done = !!ticks[s.id].done;
+        return { ...s, done };
+      });
+      const live = steps.filter((s) => s.state !== "na");
+      const open = live.filter((s) => !s.done);
+      const closed = steps.some((s) => s.closes && s.done);
+      const end = item.due_end ? new Date(item.due_end) : null;
+      let group;
+      if (closed) group = "done";
+      else if (end) group = end < now ? "overdue" : (end - now <= 7 * DAY_MS ? "week" : "later");
+      else if (open[0] && open[0].state === "blocked") group = "waiting";
+      else group = item.optional ? "practice" : "nodate";
+      return {
+        steps, group, closed, end,
+        done: live.length - open.length, total: live.length,
+        you: open.find((s) => s.owner === "you") || null,
+        malla: open.find((s) => s.owner === "malla") || null,
+      };
+    },
+    // "Sun 27 Sep, 23:59 · in 4 days", "Week 41 (5 to 11 Oct) · in 12 days", "Sun 20 Sep, 23:59 · 3 days ago"
+    dueText(item, now) {
+      if (!item.due) return "No date yet";
+      const d = M.parseDate(item.due);
+      let abs;
+      if (item.precision === "week") {
+        const e = new Date(d); e.setDate(d.getDate() + 6);
+        const from = d.getMonth() === e.getMonth() ? `${d.getDate()}` : `${d.getDate()} ${MON[d.getMonth()]}`;
+        abs = `Week ${M.isoWeek(d).week} (${from} to ${e.getDate()} ${MON[e.getMonth()]})`;
+      } else if (item.precision === "datetime") {
+        abs = `${M.fmtDay(d)}, ${M.fmtTime(d)}`;
+      } else {                                            // a range of days, such as a week window, shows both ends
+        const e = new Date(item.due_end);
+        abs = M.sameDay(d, e) ? M.fmtDay(d) : `${M.fmtDay(d)} to ${M.fmtDay(e)}`;
+      }
+      const end = new Date(item.due_end);
+      const midnight = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate());
+      const days = Math.round((midnight(end) - midnight(now)) / DAY_MS);
+      let rel;
+      if (end < now) rel = days === 0 ? "earlier today" : `${-days} day${days === -1 ? "" : "s"} ago`;
+      else rel = days === 0 ? "today" : days === 1 ? "tomorrow" : `in ${days} days`;
+      return `${abs} · ${rel}`;
     },
   };
 

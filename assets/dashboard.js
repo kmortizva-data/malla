@@ -375,8 +375,10 @@
       if (cc && cc.tracker && M.tracker) {     // how far along: the tracker's steps plus the ticks kept with the progress
         const ticks = ((progress.tracker || {})[c.code]) || {};
         const pc = (k) => (k.total ? Math.round((100 * k.done) / k.total) : 0);
-        const a = M.tracker.count(cc.tracker, ticks, "assignment"), x = M.tracker.count(cc.tracker, ticks, "example");
-        track = `<div class="meta small pg-dash"><a href="${P + cc.tracker.url}">Assignments ${pc(a)} % · Examples ${pc(x)} %</a></div>`;
+        const words = { assignment: "Assignments", quiz: "Quizzes", lab: "Labs", exam: "Exams", example: "Examples" };
+        const parts = Object.keys(words).filter((k) => cc.tracker.items.some((i) => i.kind === k))
+          .map((k) => `${words[k]} ${pc(M.tracker.count(cc.tracker, ticks, k))} %`);
+        track = `<div class="meta small pg-dash"><a href="${P + cc.tracker.url}">${parts.join(" · ")}</a></div>`;
       }
       const last = cc ? M.lastNode(c.code) : null;
       const resume = last && last.kind !== "course"
@@ -440,6 +442,31 @@
     } catch (e) { el.innerHTML = ""; }
   }
   M.sync.onchange = () => renderSync();
+
+  // ---------------------------------------------------------------- up next: the first open items of the queue page
+  let queueItems = [];
+  function renderUpNext() {
+    const el = $("up-next-list");
+    if (!el || !M.queue) return;
+    const now = new Date();
+    const rank = { overdue: 0, week: 1, later: 2, nodate: 3, waiting: 4 };
+    const open = queueItems.map((item) => ({ item, view: M.queue.view(item, progress.tracker || {}, now) }))
+      .filter((x) => x.view.group in rank && !x.item.optional)
+      .sort((a, b) => rank[a.view.group] - rank[b.view.group] || (a.view.end || 0) - (b.view.end || 0) || a.item.order - b.item.order)
+      .slice(0, 4);
+    if (!open.length) { el.innerHTML = '<li class="muted">Nothing open. Well done.</li>'; return; }
+    el.innerHTML = open.map(({ item, view }) => {
+      const who = view.you && view.you.state !== "blocked" ? `You: ${M.esc(view.you.label)}`
+        : view.malla ? `Malla: ${M.esc(view.malla.label)}${view.malla.state === "blocked" ? " (blocked)" : ""}` : "";
+      return `<li class="q-up${view.group === "overdue" ? " is-overdue" : ""}" style="--accent:${courseVar(item.course)}">` +
+        `<span class="q-course">${M.esc(item.short)}</span>` +
+        `<a class="q-up-title" href="${P + item.url}">${M.esc(item.title).replace(/\S*\w-\w\S*/g, (w) => `<span class="nowrap">${w}</span>`)}</a>` +
+        `<span class="q-up-due small">${M.esc(M.queue.dueText(item, now))}</span>` +
+        (who ? `<span class="q-up-next small">${who}</span>` : "") + "</li>";
+    }).join("");
+  }
+  fetch(P + "data/queue.json").then((r) => r.json()).then((q) => { queueItems = q; renderUpNext(); })
+    .catch(() => { const el = $("up-next-list"); if (el) el.innerHTML = '<li class="muted">The queue could not be read.</li>'; });
 
   renderBanner(); renderStrip(); renderWeek(); renderTimeline(); renderCourses(); renderSync();
   setInterval(renderStrip, 30000);

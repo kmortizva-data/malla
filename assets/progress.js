@@ -22,13 +22,13 @@
     const ticks = ((progress && progress.tracker) || {})[code] || {};
     document.querySelectorAll("input[data-step]").forEach((box) => {
       const tick = (ticks[box.dataset.item] || {})[box.dataset.step];
-      if (tick) box.checked = !!tick.done;
+      const item = data.items.find((i) => i.id === box.dataset.item) || { steps: {} };
+      const at = (item.steps[box.dataset.step] || {}).at;          // a Canvas reading on the PC copy
+      if (M.tracker.tickWins(tick, at)) box.checked = !!tick.done;
       const li = box.closest(".pg-step");
       if (li) li.classList.toggle("done", box.checked);
     });
-    for (const kind of ["assignment", "example"]) {
-      document.querySelectorAll(`[data-summary="${kind}"]`).forEach((el) => paint(el, M.tracker.count(data, ticks, kind)));
-    }
+    document.querySelectorAll("[data-summary]").forEach((el) => paint(el, M.tracker.count(data, ticks, el.dataset.summary)));
     for (const item of data.items) {
       document.querySelectorAll(`[data-item-row="${item.id}"]`).forEach((el) => paint(el, M.tracker.count(data, ticks, null, item.id)));
     }
