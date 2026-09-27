@@ -1,0 +1,665 @@
+/* Shared behaviour for every page: theme, toasts, one storage interface with two backends
+   (the local server's JSON API on the PC, localStorage on the phone copy), an optional two-way
+   sync of notes and progress through a private GitHub repository, "open on disk" buttons, the
+   course-map drawer, date helpers, module checkpoints, document task lists. No framework. */
+(function () {
+  const P = window.MALLA_PREFIX || "";
+  const M = (window.malla = {});
+  M.static = !!window.MALLA_STATIC;           // the phone copy: no server behind the pages
+  const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+  M.esc = esc;
+  M.pad = (n) => String(n).padStart(2, "0");
+  M.hub = fetch(P + "data/hub.json").then((r) => r.json()).catch(() => ({}));
+
+  // ---- theme ----------------------------------------------------------------
+  function setTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem("malla.theme", t); } catch (e) { /* private mode */ }
+  }
+  const themeBtn = document.getElementById("theme-btn");
+  if (themeBtn) themeBtn.addEventListener("click", () =>
+    setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark"));
+
+  // ---- toast ----------------------------------------------------------------
+  let toastTimer;
+  M.toast = function (html, ms = 3500) {
+    const t = document.getElementById("toast");
+    if (!t) return;
+    t.innerHTML = html;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, ms);
+  };
+
+  // ---- api (the local server) -----------------------------------------------
+  M.api = async function (path, body, method) {
+    const opts = { method: method || (body ? "POST" : "GET"), headers: {} };
+    if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+    const r = await fetch(path, opts);
+    let data = null;
+    try { data = await r.json(); } catch (e) { /* no body */ }
+    if (!r.ok) throw new Error((data && data.error) || ("HTTP " + r.status));
+    return data;
+  };
+
+  // ---- data format, version 2 ------------------------------------------------
+  // Every note and every checkpoint list carries the time it was written, so two devices merge
+  // without asking: the newest entry per key wins, an emptied note stays as a dated tombstone.
+  // Mirrors site/notes_sync.py.
+  const EPOCH = "2000-01-01T00:00:00Z";
+  const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+  const emptyOf = (kind) => (kind === "notes" ? { version: 2, days: {}, weeks: {} }
+    : { version: 2, checkpoints: {}, quiz_attempts: [], flags: [], tracker: {}, reads: {} });
+  M.noteText = (e) => (typeof e === "string" ? e : (e && e.text) || "");
+  M.states = (e) => (Array.isArray(e) ? e : (e && e.states) || []);
+  function upgrade(kind, data) {
+    if (!data || typeof data !== "object") return emptyOf(kind);
+    if (data.version === 2) return data;
+    const out = emptyOf(kind);
+    if (kind === "notes") {
+      for (const [day, v] of Object.entries(data.days || {})) out.days[day] = typeof v === "object" ? v : { text: String(v), at: EPOCH };
+      for (const [wk, fields] of Object.entries(data.weeks || {})) {
+        out.weeks[wk] = {};
+        for (const [k, v] of Object.entries(fields || {})) out.weeks[wk][k] = typeof v === "object" && !Array.isArray(v) ? v : { text: String(v), at: EPOCH };
+      }
+    } else {
+      for (const [course, mods] of Object.entries(data.checkpoints || {})) {
+        out.checkpoints[course] = {};
+        for (const [m, st] of Object.entries(mods || {})) out.checkpoints[course][m] = Array.isArray(st) ? { states: st.map(Boolean), at: EPOCH } : st;
+      }
+      out.quiz_attempts = [...(data.quiz_attempts || [])];
+      out.flags = [...(data.flags || [])];
+      out.reads = { ...(data.reads || {}) };
+    }
+    return out;
+  }
+  function newer(a, b) {
+    if (!a) return b; if (!b) return a;
+    if ((a.at || "") !== (b.at || "")) return (a.at || "") > (b.at || "") ? a : b;
+    const size = (e) => String(e.text !== undefined ? e.text : (e.states || "")).length;
+    return size(a) >= size(b) ? a : b;
+  }
+  function mergeNotes(a, b) {
+    const out = emptyOf("notes");
+    for (const day of new Set([...Object.keys(a.days || {}), ...Object.keys(b.days || {})])) out.days[day] = newer((a.days || {})[day], (b.days || {})[day]);
+    for (const wk of new Set([...Object.keys(a.weeks || {}), ...Object.keys(b.weeks || {})])) {
+      const fa = (a.weeks || {})[wk] || {}, fb = (b.weeks || {})[wk] || {};
+      out.weeks[wk] = {};
+      for (const k of new Set([...Object.keys(fa), ...Object.keys(fb)])) out.weeks[wk][k] = newer(fa[k], fb[k]);
+    }
+    return out;
+  }
+  function mergeProgress(a, b) {
+    const out = emptyOf("progress");
+    for (const course of new Set([...Object.keys(a.checkpoints || {}), ...Object.keys(b.checkpoints || {})])) {
+      const ma = (a.checkpoints || {})[course] || {}, mb = (b.checkpoints || {})[course] || {};
+      out.checkpoints[course] = {};
+      for (const m of new Set([...Object.keys(ma), ...Object.keys(mb)])) out.checkpoints[course][m] = newer(ma[m], mb[m]);
+    }
+    const seen = new Set();
+    for (const t of [...(a.quiz_attempts || []), ...(b.quiz_attempts || [])]) {
+      const key = `${t.finished}|${t.course}|${t.module}`;
+      if (!seen.has(key)) { seen.add(key); out.quiz_attempts.push(t); }
+    }
+    out.quiz_attempts.sort((x, y) => String(x.finished || "").localeCompare(String(y.finished || "")));
+    out.quiz_attempts = out.quiz_attempts.slice(-500);
+    const seenF = new Set();
+    for (const f of [...(a.flags || []), ...(b.flags || [])]) {
+      const key = `${f.at}|${f.question_id}`;
+      if (!seenF.has(key)) { seenF.add(key); out.flags.push(f); }
+    }
+    for (const course of new Set([...Object.keys(a.tracker || {}), ...Object.keys(b.tracker || {})])) {   // ticked steps: newest wins
+      const ca = (a.tracker || {})[course] || {}, cb = (b.tracker || {})[course] || {};
+      out.tracker[course] = {};
+      for (const item of new Set([...Object.keys(ca), ...Object.keys(cb)])) {
+        const ia = ca[item] || {}, ib = cb[item] || {};
+        out.tracker[course][item] = {};
+        for (const s of new Set([...Object.keys(ia), ...Object.keys(ib)])) out.tracker[course][item][s] = newer(ia[s], ib[s]);
+      }
+    }
+    for (const url of new Set([...Object.keys(a.reads || {}), ...Object.keys(b.reads || {})])) {   // reading log: newest wins per day
+      const ra = (a.reads || {})[url] || {}, rb = (b.reads || {})[url] || {};
+      out.reads[url] = {};
+      for (const day of new Set([...Object.keys(ra), ...Object.keys(rb)])) out.reads[url][day] = newer(ra[day], rb[day]);
+    }
+    return out;
+  }
+  const mergeOf = (kind, a, b) => (kind === "notes" ? mergeNotes(a, b) : mergeProgress(a, b));
+  M.merge = mergeOf;
+
+  // ---- progress tracker arithmetic: the progress page, the course page and the dashboard (mirrors build.py) ----
+  // Steps done over the steps that apply. A step of the student's counts as its tick says when a tick exists, and as
+  // tracker.json says otherwise; Malla's steps count only as tracker.json says. On the PC copy a step can carry a
+  // Canvas reading (step.at): a tick older than that reading no longer overrides it.
+  const tickWins = (tick, at) => !!tick && (!at || new Date(tick.at || 0) > new Date(at));
+  M.tracker = {
+    tickWins,
+    count(data, ticks, kind, itemId) {
+      const out = { done: 0, total: 0, malla: { done: 0, total: 0 }, you: { done: 0, total: 0 } };
+      for (const item of data.items || []) {
+        if (itemId ? item.id !== itemId : (item.kind !== kind || item.counted === false)) continue;
+        for (const s of (data.step_types || {})[item.kind] || []) {
+          const step = (item.steps || {})[s.id] || {};
+          if (step.state === "na") continue;
+          let done = step.state === "done";
+          if (s.owner === "you") {
+            const tick = ((ticks || {})[item.id] || {})[s.id];
+            if (tickWins(tick, step.at)) done = !!tick.done;
+          }
+          out.total++; out[s.owner].total++;
+          if (done) { out.done++; out[s.owner].done++; }
+        }
+      }
+      return out;
+    },
+  };
+
+  // ---- the queue (CLAUDE.md block 60): the queue page and the dashboard's "Up next" (mirrors malla_queue.py) ----
+  // An item leaves the queue when its closing step is done; until then its date puts it in a group, worked out
+  // against today, so the page is right on any day without a rebuild.
+  const DAY_MS = 86400000;
+  M.queue = {
+    view(item, progressTicks, now) {
+      const ticks = (((progressTicks || {})[item.course]) || {})[item.id] || {};
+      const steps = item.steps.map((s) => {
+        let done = s.state === "done";
+        if (s.owner === "you" && tickWins(ticks[s.id], s.at)) done = !!ticks[s.id].done;
+        return { ...s, done };
+      });
+      const live = steps.filter((s) => s.state !== "na");
+      const open = live.filter((s) => !s.done);
+      const closed = steps.some((s) => s.closes && s.done);
+      const end = item.due_end ? new Date(item.due_end) : null;
+      let group;
+      if (closed) group = "done";
+      else if (end) group = end < now ? "overdue" : (end - now <= 7 * DAY_MS ? "week" : "later");
+      else if (open[0] && open[0].state === "blocked") group = "waiting";
+      else group = item.optional ? "practice" : "nodate";
+      return {
+        steps, group, closed, end,
+        done: live.length - open.length, total: live.length,
+        you: open.find((s) => s.owner === "you") || null,
+        malla: open.find((s) => s.owner === "malla") || null,
+      };
+    },
+    // "Sun 27 Sep, 23:59 · in 4 days", "Week 41 (5 to 11 Oct) · in 12 days", "Sun 20 Sep, 23:59 · 3 days ago"
+    dueText(item, now) {
+      if (!item.due) return "No date yet";
+      const d = M.parseDate(item.due);
+      let abs;
+      if (item.precision === "week") {
+        const e = new Date(d); e.setDate(d.getDate() + 6);
+        const from = d.getMonth() === e.getMonth() ? `${d.getDate()}` : `${d.getDate()} ${MON[d.getMonth()]}`;
+        abs = `Week ${M.isoWeek(d).week} (${from} to ${e.getDate()} ${MON[e.getMonth()]})`;
+      } else if (item.precision === "datetime") {
+        abs = `${M.fmtDay(d)}, ${M.fmtTime(d)}`;
+      } else {                                            // a range of days, such as a week window, shows both ends
+        const e = new Date(item.due_end);
+        abs = M.sameDay(d, e) ? M.fmtDay(d) : `${M.fmtDay(d)} to ${M.fmtDay(e)}`;
+      }
+      const end = new Date(item.due_end);
+      const midnight = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate());
+      const days = Math.round((midnight(end) - midnight(now)) / DAY_MS);
+      let rel;
+      if (end < now) rel = days === 0 ? "earlier today" : `${-days} day${days === -1 ? "" : "s"} ago`;
+      else rel = days === 0 ? "today" : days === 1 ? "tomorrow" : `in ${days} days`;
+      return `${abs} · ${rel}`;
+    },
+  };
+
+  // ---- localStorage ---------------------------------------------------------
+  const LS = {
+    get(key, fallback) {
+      try { const v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (e) { return false; }
+    },
+  };
+  M.ls = LS;
+
+  // ---- sync through a private GitHub repository (phone copy only) -----------
+  // The PC server does the same job in site/notes_sync.py. The token is typed once on the
+  // phone and kept in its localStorage; it is never part of the pages.
+  function b64encode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function b64decode(b64) {
+    const bin = atob(String(b64 || "").replace(/\s/g, ""));
+    return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
+  }
+  M.sync = {
+    config: null,
+    state: { last: {}, error: null },
+    onchange: null,
+    token() { return LS.get("malla.sync.token", null); },
+    setToken(t) { LS.set("malla.sync.token", (t || "").trim() || null); this.state.error = null; },
+    ready() { return M.static && !!(this.config && this.config.repo) && !!this.token(); },
+    async init() {
+      if (this.config === null) { const h = await M.hub; this.config = (h && h.sync) || false; }
+    },
+    url(kind) {
+      const files = this.config.files || {};
+      return `https://api.github.com/repos/${this.config.repo}/contents/${files[kind] || kind + ".json"}`;
+    },
+    headers(json) {
+      const h = { Authorization: `Bearer ${this.token()}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
+      if (json) h["Content-Type"] = "application/json";
+      return h;
+    },
+    async get(kind) {
+      const r = await fetch(`${this.url(kind)}?ref=${encodeURIComponent(this.config.branch || "main")}`, { headers: this.headers(false) });
+      if (r.status === 404) return { data: null, sha: null };
+      if (r.status === 401 || r.status === 403) throw new Error("GitHub rejected the token (expired, or not allowed on this repository)");
+      if (!r.ok) throw new Error("GitHub " + r.status);
+      const meta = await r.json();
+      let data = null;
+      try { data = upgrade(kind, JSON.parse(b64decode(meta.content) || "{}")); } catch (e) { data = emptyOf(kind); }
+      return { data, sha: meta.sha };
+    },
+    async put(kind, data, sha) {
+      const body = { message: `${kind}: Malla phone ${nowIso()}`, branch: this.config.branch || "main", content: b64encode(JSON.stringify(data, null, 1)) };
+      if (sha) body.sha = sha;
+      const r = await fetch(this.url(kind), { method: "PUT", headers: this.headers(true), body: JSON.stringify(body) });
+      if (r.status === 409 || r.status === 422) return "conflict";
+      if (r.status === 401 || r.status === 403) throw new Error("GitHub rejected the token (expired, or not allowed on this repository)");
+      if (!r.ok) throw new Error("GitHub " + r.status);
+      return "ok";
+    },
+    notify() { if (typeof this.onchange === "function") this.onchange(this.state); },
+    async pull(kind, local) {
+      try {
+        const remote = await this.get(kind);
+        const merged = mergeOf(kind, local, remote.data || emptyOf(kind));
+        LS.set("malla." + kind, merged);
+        if (!remote.data || JSON.stringify(merged) !== JSON.stringify(remote.data)) await this.put(kind, merged, remote.sha);
+        this.state.last[kind] = nowIso(); this.state.error = null; this.notify();
+        return merged;
+      } catch (e) { this.state.error = e.message; this.notify(); return local; }
+    },
+    async push(kind, local) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const remote = await this.get(kind);
+          const merged = mergeOf(kind, local, remote.data || emptyOf(kind));
+          LS.set("malla." + kind, merged);
+          M.store.cache[kind] = merged;
+          const res = await this.put(kind, merged, remote.sha);
+          if (res === "conflict") continue;
+          this.state.last[kind] = nowIso(); this.state.error = null; this.notify();
+          return true;
+        } catch (e) { this.state.error = e.message; this.notify(); return false; }
+      }
+      this.state.error = "GitHub kept changing under us; will retry on the next save"; this.notify();
+      return false;
+    },
+  };
+
+  // ---- storage: one interface, two backends ---------------------------------
+  // On the PC the server owns notes.json and progress.json (and syncs them with GitHub itself);
+  // if it is down, or on the phone copy, the same data lives in this browser's localStorage,
+  // synced with GitHub when a token is present.
+  M.store = {
+    local: M.static,                         // true once the server proved unreachable, always on the phone
+    cache: { notes: null, progress: null },
+    loading: { notes: false, progress: false },
+    async load(kind) {
+      this.loading[kind] = true;
+      let data = null;
+      if (!M.static) {
+        try { data = await M.api("/api/" + kind); this.local = false; } catch (e) { this.local = true; }
+      }
+      if (!data) data = LS.get("malla." + kind, emptyOf(kind));
+      data = upgrade(kind, data);
+      if (M.static) { await M.sync.init(); if (M.sync.ready()) data = await M.sync.pull(kind, data); }
+      this.cache[kind] = data;
+      if (kind === "progress" && M.reads) M.reads.decorate(document);
+      return data;
+    },
+    notes() { return this.load("notes"); },
+    progress() { return this.load("progress"); },
+    async saveNotes(payload) {               // {days: {date: text}, weeks: {isoWeek: {mandatory: text}}}
+      const notes = this.cache.notes || upgrade("notes", LS.get("malla.notes", emptyOf("notes"))), at = nowIso();
+      for (const [day, text] of Object.entries(payload.days || {})) notes.days[day] = { text, at };
+      for (const [wk, fields] of Object.entries(payload.weeks || {})) {
+        notes.weeks[wk] = notes.weeks[wk] || {};
+        for (const [k, text] of Object.entries(fields || {})) notes.weeks[wk][k] = { text, at };
+      }
+      this.cache.notes = notes;
+      if (!M.static) {
+        try { await M.api("/api/notes", payload); this.local = false; return "server"; } catch (e) { this.local = true; }
+      }
+      LS.set("malla.notes", notes);
+      if (M.sync.ready() && await M.sync.push("notes", notes)) return "github";
+      return "local";
+    },
+    async update(op) {                       // {op: set_checkpoint | add_attempt | flag | set_step | set_read, ...}
+      if (!M.static) {
+        try { await M.api("/api/progress", op); this.local = false; return "server"; }
+        catch (e) { if (op.op !== "set_read") this.local = true; }   // an older server rejects set_read; keep it here, it is not down
+      }
+      const p = this.cache.progress || upgrade("progress", LS.get("malla.progress", emptyOf("progress")));
+      if (op.op === "set_checkpoint") {
+        const byCourse = (p.checkpoints[op.course] = p.checkpoints[op.course] || {});
+        const entry = { states: [...M.states(byCourse[String(op.module)])], at: nowIso() };
+        while (entry.states.length <= op.index) entry.states.push(false);
+        entry.states[op.index] = !!op.value;
+        byCourse[String(op.module)] = entry;
+      } else if (op.op === "add_attempt") {
+        (p.quiz_attempts = p.quiz_attempts || []).push(op.attempt);
+      } else if (op.op === "flag") {
+        const flag = { ...op }; delete flag.op;
+        (p.flags = p.flags || []).push(flag);
+      } else if (op.op === "set_step") {
+        p.tracker = p.tracker || {};
+        const byCourse = (p.tracker[op.course] = p.tracker[op.course] || {});
+        const byItem = (byCourse[op.item] = byCourse[op.item] || {});
+        byItem[op.step] = { done: !!op.value, at: nowIso() };
+      } else if (op.op === "set_read") {     // reading log: one entry per page and day, {on, at}; on:false is an undo
+        p.reads = p.reads || {};
+        const byPage = (p.reads[op.url] = p.reads[op.url] || {});
+        byPage[op.date] = { on: !!op.value, at: nowIso() };
+      }
+      this.cache.progress = p;
+      LS.set("malla.progress", p);
+      if (M.sync.ready() && await M.sync.push("progress", p)) return "github";
+      return "local";
+    },
+    savedLabel(where, when) {
+      const t = `${M.pad(when.getHours())}:${M.pad(when.getMinutes())}`;
+      if (where === "server") return "Saved " + t;
+      if (where === "github") return "Saved and synced " + t;
+      return M.static ? "Saved on this device " + t + (M.sync.ready() ? " (sync failed)" : " (not synced)")
+        : "Server off: kept in this browser only";
+    },
+  };
+
+  // ---- open on disk (delegated; never rendered on the phone copy) ----------
+  // a data-ref button names last year's material by its catalogue id: the server looks the file up
+  document.addEventListener("click", async (ev) => {
+    const b = ev.target.closest(".open[data-path], .open[data-ref]");
+    if (!b) return;
+    ev.preventDefault();
+    const ref = b.dataset.ref, path = b.dataset.path, mode = b.dataset.mode || "auto";
+    const page = b.dataset.page ? +b.dataset.page : undefined;
+    b.disabled = true;
+    try {
+      const r = await M.api("/api/open", ref ? { ref, page } : { path, mode, page });
+      M.toast(`Opened (${esc(r.action)})`);
+    } catch (e) {
+      M.toast(`Could not open: ${esc(e.message)}<br><code>${esc(ref || path)}</code>`, 8000);
+    } finally { b.disabled = false; }
+  });
+
+  // ---- refresh schedule (PC only) -------------------------------------------
+  const rb = document.getElementById("refresh-btn");
+  if (rb) rb.addEventListener("click", async () => {
+    rb.disabled = true; rb.textContent = "Refreshing…";
+    try {
+      const r = await M.api("/api/refresh", {});
+      const sync = r.steps && r.steps[0];
+      M.toast(sync && sync.returncode ? "TimeEdit fetch failed; the banner explains" : "Schedule refreshed", 5000);
+      setTimeout(() => location.reload(), 1200);
+    } catch (e) {
+      M.toast("Refresh failed: " + esc(e.message), 6000);
+      rb.disabled = false; rb.textContent = "Refresh schedule";
+    }
+  });
+
+  // ---- course map: a sidebar on wide screens, a drawer behind a button on small ones
+  const railBtn = document.getElementById("rail-toggle"), rail = document.getElementById("rail");
+  if (railBtn && rail) {
+    const setOpen = (open) => {
+      document.body.classList.toggle("rail-open", open);
+      railBtn.setAttribute("aria-expanded", String(open));
+    };
+    railBtn.addEventListener("click", (ev) => { ev.stopPropagation(); setOpen(!document.body.classList.contains("rail-open")); });
+    document.addEventListener("click", (ev) => {
+      if (document.body.classList.contains("rail-open") && !rail.contains(ev.target)) setOpen(false);
+    });
+    document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") setOpen(false); });
+  }
+  if (rail) {
+    const cur = rail.querySelector(".rail-item.current");
+    if (cur && rail.scrollHeight > rail.clientHeight) rail.scrollTop = Math.max(0, cur.offsetTop - rail.clientHeight / 2);
+  }
+
+  // ---- where you are on the study path (feeds "Continue" on the dashboard) --
+  if (window.MALLA_NODE && window.MALLA_NODE.course) {
+    LS.set("malla.last." + window.MALLA_NODE.course, { ...window.MALLA_NODE, at: new Date().toISOString() });
+  }
+  M.lastNode = (code) => LS.get("malla.last." + code, null);
+
+  // ---- dates ----------------------------------------------------------------
+  M.parseDate = (s) => {
+    if (!s) return null;
+    if (s.length === 10) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+    return new Date(s);
+  };
+  M.isoDate = (d) => `${d.getFullYear()}-${M.pad(d.getMonth() + 1)}-${M.pad(d.getDate())}`;
+  M.dow3 = (d) => DOW[d.getDay()];
+  M.mon3 = (d) => MON[d.getMonth()];
+  M.fmtDay = (d) => `${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+  M.fmtTime = (d) => `${M.pad(d.getHours())}:${M.pad(d.getMinutes())}`;
+  M.sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  M.isoWeek = (d) => {
+    const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day);
+    const year = t.getUTCFullYear();
+    const yearStart = new Date(Date.UTC(year, 0, 1));
+    return { year, week: Math.ceil(((t - yearStart) / 86400000 + 1) / 7) };
+  };
+  M.mondayOf = (year, week) => {
+    const jan4 = new Date(year, 0, 4);          // always inside ISO week 1
+    const day = jan4.getDay() || 7;
+    const monday = new Date(jan4);
+    monday.setDate(jan4.getDate() - day + 1 + (week - 1) * 7);
+    return monday;
+  };
+  M.fmtWhen = (start, precision) => {
+    const d = M.parseDate(start);
+    if (!d) return "date unknown";
+    if (precision === "week") {
+      const end = new Date(d); end.setDate(d.getDate() + 6);
+      return `week ${M.isoWeek(d).week} · ${d.getDate()} ${MON[d.getMonth()]}–${end.getDate()} ${MON[end.getMonth()]}`;
+    }
+    if (precision === "day") return M.fmtDay(d);
+    return `${M.fmtDay(d)} ${M.fmtTime(d)}`;
+  };
+  M.countdown = (to) => {
+    const ms = to - Date.now();
+    if (ms < 0) return "now";
+    const m = Math.round(ms / 60000);
+    if (m < 60) return `in ${m} min`;
+    const h = Math.floor(m / 60);
+    if (h < 48) return `in ${h} h ${m % 60} min`;
+    const d = Math.floor(h / 24);
+    return `in ${d} d ${h % 24} h`;
+  };
+  document.querySelectorAll(".when[data-start]").forEach((el) => {
+    if (el.dataset.start) el.textContent = M.fmtWhen(el.dataset.start, el.dataset.precision);
+  });
+
+  // ---- clock ----------------------------------------------------------------
+  const clock = document.getElementById("clock");
+  function tick() {
+    if (!clock) return;
+    const n = new Date();
+    clock.textContent = `${M.fmtDay(n)} ${M.fmtTime(n)} · week ${M.isoWeek(n).week}`;
+  }
+  tick(); setInterval(tick, 30000);
+
+  // ---- module checkpoints ---------------------------------------------------
+  const boxes = document.querySelectorAll("input[type=checkbox][data-course][data-module][data-index]");
+  const counters = document.querySelectorAll(".progress[data-course]");
+  if (boxes.length || counters.length) {
+    M.store.progress().then((p) => {
+      boxes.forEach((b) => {
+        const st = M.states(((p.checkpoints || {})[b.dataset.course] || {})[b.dataset.module]);
+        b.checked = !!st[+b.dataset.index];
+      });
+      counters.forEach((c) => {
+        const st = M.states(((p.checkpoints || {})[c.dataset.course] || {})[c.dataset.module]);
+        c.textContent = `${st.filter(Boolean).length}/${c.dataset.total} checkpoints`;
+      });
+      if (boxes.length && M.store.local && !M.static) M.toast("Progress server not reachable; checkpoints stay in this browser", 5000);
+    });
+    boxes.forEach((b) => b.addEventListener("change", async () => {
+      const where = await M.store.update({ op: "set_checkpoint", course: b.dataset.course, module: +b.dataset.module,
+        index: +b.dataset.index, value: b.checked });
+      if (where === "local" && !M.static) M.toast("Server off: kept in this browser only");
+      else if (M.static) M.toast(M.store.savedLabel(where, new Date()));
+    }));
+  }
+
+  // ---- tables and display formulas wider than the screen say so ------------
+  const wraps = document.querySelectorAll(".table-wrap, .math-block");
+  if (wraps.length) {
+    const markScroll = () => wraps.forEach((w) => w.classList.toggle("scrolls", w.scrollWidth > w.clientWidth + 1));
+    markScroll();
+    window.addEventListener("resize", markScroll);
+  }
+
+  // ---- task lists inside documents (this browser only) ----------------------
+  const doc = document.querySelector(".doc[data-doc]");
+  if (doc) {
+    const key = "malla.tasks." + doc.dataset.doc;
+    let saved = LS.get(key, {});
+    doc.querySelectorAll(".tasklist input").forEach((b, i) => {
+      if (saved[i] !== undefined) b.checked = saved[i];
+      b.addEventListener("change", () => { saved[i] = b.checked; LS.set(key, saved); });
+    });
+  }
+
+  // ---- reading log: "read today" on every content page, freshness colours on every link to it ----
+  // progress.reads[url][YYYY-MM-DD] = {on, at}. Under a week is fresh (green), a week or more is due a look
+  // (amber), a month or more means revise (red). Links anywhere on the site get a dot; the page gets a button.
+  const READ_KINDS = new Set(["module", "primer", "walkthrough", "lesson", "review", "quiz", "trainer", "boards", "exam"]);
+  const midnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  M.reads = {
+    WEEK: 7, MONTH: 30,
+    all() { return ((M.store.cache.progress || {}).reads) || {}; },
+    dates(url) {
+      return Object.entries(this.all()[url] || {}).filter(([, e]) => e && e.on).map(([d]) => d).sort();
+    },
+    info(url, now) {
+      const dates = this.dates(url);
+      if (!dates.length) return null;
+      const last = dates[dates.length - 1];
+      const days = Math.round((midnight(now || new Date()) - midnight(M.parseDate(last))) / DAY_MS);
+      const bucket = days < this.WEEK ? "fresh" : days < this.MONTH ? "week" : "month";
+      return { dates, last, count: dates.length, days, bucket };
+    },
+    ago(days) {
+      if (days <= 0) return "today";
+      if (days === 1) return "yesterday";
+      if (days < 14) return `${days} days ago`;
+      if (days < 60) return `${Math.floor(days / 7)} weeks ago`;
+      return `${Math.floor(days / 30)} months ago`;
+    },
+    label(info) {
+      if (!info) return "Not read yet";
+      return `Read ${this.ago(info.days)} (${M.fmtDay(M.parseDate(info.last))})${info.count > 1 ? ` · ${info.count} reads` : ""}`;
+    },
+    async mark(url, date, value) {
+      const where = await M.store.update({ op: "set_read", url, date, value });
+      const p = M.store.cache.progress || upgrade("progress", LS.get("malla.progress", emptyOf("progress")));
+      p.reads = p.reads || {};
+      (p.reads[url] = p.reads[url] || {})[date] = { on: !!value, at: nowIso() };
+      M.store.cache.progress = p;
+      this.decorate(document);
+      return where;
+    },
+    // the site-relative key of a link ("M7001K/m2.html"), or null for external links and anchors
+    keyOf(a) {
+      const href = a.getAttribute("href");
+      if (!href || href.startsWith("#") || a.target === "_blank") return null;
+      let u;
+      try { u = new URL(href, location.href); } catch (e) { return null; }
+      if (u.origin !== location.origin) return null;
+      const root = new URL(P || "./", location.href).pathname;
+      let path;
+      try { path = decodeURIComponent(u.pathname); } catch (e) { path = u.pathname; }
+      if (!path.startsWith(root)) return null;
+      let key = path.slice(root.length);
+      if (key === "" || key.endsWith("/")) key += "index.html";
+      return key;
+    },
+    decorate(root) {
+      const reads = this.all(), now = new Date();
+      (root || document).querySelectorAll("a[href]").forEach((a) => {
+        const key = this.keyOf(a);
+        const info = key && reads[key] ? this.info(key, now) : null;
+        a.classList.remove("read-fresh", "read-week", "read-month");
+        const old = a.querySelector(":scope .read-dot");
+        if (old) old.remove();
+        if (!info) { if (a.dataset.readTitle) { a.removeAttribute("title"); delete a.dataset.readTitle; } return; }
+        a.classList.add("read-" + info.bucket);
+        a.title = this.label(info); a.dataset.readTitle = "1";
+        const dot = document.createElement("i");
+        dot.className = "read-dot"; dot.setAttribute("aria-hidden", "true");
+        const slot = a.matches(".card") ? a.querySelector(".card-eyebrow") : a.matches(".pager a") ? a.querySelector(".pager-title") : null;
+        (slot || a).appendChild(dot);
+      });
+      document.querySelectorAll(".readlog[data-url]").forEach((w) => this.paint(w));
+    },
+    paint(w) {
+      const url = w.dataset.url, today = M.isoDate(new Date()), info = this.info(url, new Date());
+      const readToday = !!info && info.last === today;
+      w.className = `readlog ${w.dataset.place === "bottom" ? "readlog-bottom" : "readlog-top"}${info ? " read-" + info.bucket : ""}`;
+      const hist = info ? `<details class="readlog-hist small"><summary>${info.count === 1 ? "1 day" : info.count + " days"}</summary><ul>` +
+        info.dates.slice().reverse().map((d) => `<li><span>${M.fmtDay(M.parseDate(d))} ${d.slice(0, 4)}</span>` +
+          `<button type="button" class="readlog-undo" data-date="${d}" title="Remove this day from the log">remove</button></li>`).join("") + "</ul></details>" : "";
+      w.innerHTML = (w.dataset.place === "bottom" ? '<span class="readlog-lead">Finished this page?</span>' : "") +
+        `<button type="button" class="btn btn-small readlog-btn${readToday ? " is-read" : ""}" aria-pressed="${readToday}">${readToday ? "✓ Read today" : "Mark as read today"}</button>` +
+        `<span class="readlog-info small">${info ? `Read <b>${this.ago(info.days)}</b> · ${M.fmtDay(M.parseDate(info.last))}` : "Not marked as read yet"}</span>${hist}`;
+    },
+  };
+  const node = window.MALLA_NODE;
+  const mainEl = document.querySelector("main.page");
+  if (node && node.url && READ_KINDS.has(node.kind) && mainEl) {
+    const make = (place) => { const w = document.createElement("div"); w.className = "readlog"; w.dataset.url = node.url; w.dataset.place = place; return w; };
+    const top = make("top"), bottom = make("bottom");
+    const heroActions = mainEl.querySelector(".hero .actions"), hero = mainEl.querySelector(".hero");
+    const docHead = mainEl.querySelector(".doc > .doc-files, .doc > .doc-facts, .doc > h1");
+    if (heroActions) heroActions.appendChild(top);
+    else if (hero) { const acts = document.createElement("div"); acts.className = "actions"; acts.appendChild(top); hero.appendChild(acts); }
+    else if (docHead) {
+      const files = mainEl.querySelector(".doc > .doc-files");
+      (files || docHead).insertAdjacentElement("afterend", top);
+    } else mainEl.insertBefore(top, mainEl.firstElementChild);
+    const pager = mainEl.querySelector("nav.pager");
+    if (pager) mainEl.insertBefore(bottom, pager); else mainEl.appendChild(bottom);
+    M.reads.paint(top); M.reads.paint(bottom);
+    document.addEventListener("click", async (ev) => {
+      const btn = ev.target.closest(".readlog-btn, .readlog-undo");
+      if (!btn) return;
+      const w = btn.closest(".readlog[data-url]");
+      const today = M.isoDate(new Date());
+      const date = btn.classList.contains("readlog-undo") ? btn.dataset.date : today;
+      const value = btn.classList.contains("readlog-undo") ? false : !btn.classList.contains("is-read");
+      btn.disabled = true;
+      const where = await M.reads.mark(w.dataset.url, date, value);
+      M.toast(`${value ? "Marked as read" : "Removed from the log"} · ${esc(M.store.savedLabel(where, new Date()))}`);
+    });
+  }
+  // pages where no other script loads the progress still need it for the dots and the button
+  if (!document.body.classList.contains("dashboard") && !document.getElementById("queue-data") && !document.getElementById("tracker-data") && !boxes.length) {
+    M.store.progress().catch(() => {});
+  }
+
+  // ---- footer ---------------------------------------------------------------
+  M.hub.then((h) => {
+    const f = document.getElementById("foot-built");
+    if (f && h.built_at) f.textContent = "Pages built " + h.built_at.replace("T", " ").slice(0, 16) + ".";
+  });
+})();

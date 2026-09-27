@@ -1,0 +1,932 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Malla//semester hub//EN
+CALSCALE:GREGORIAN
+X-WR-CALNAME:Malla HT2026
+X-WR-TIMEZONE:Europe/Stockholm
+BEGIN:VEVENT
+UID:te-1217259@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Course introduction · F433
+DTSTART:20260831T081500Z
+DTEND:20260831T094500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215865@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Course introduction · F433
+DTSTART:20260831T110000Z
+DTEND:20260831T123000Z
+LOCATION:F433
+DESCRIPTION:Cecilia Lund\, Mehdi Parian\nsource: timeedit-seed\; verified
+ : yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215360@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Course introduction · E239
+DTSTART:20260901T061500Z
+DTEND:20260901T074500Z
+LOCATION:E239
+DESCRIPTION:Jan Rosenkranz\, Saeed Chehreh Chelgani\nsource: timeedit-see
+ d\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215866@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260901T081500Z
+DTEND:20260901T094500Z
+LOCATION:F433
+DESCRIPTION:Cecilia Lund\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217248@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Lesson · F433
+DTSTART:20260902T124500Z
+DTEND:20260902T141500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215867@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260903T081500Z
+DTEND:20260903T094500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215361@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E239
+DTSTART:20260903T110000Z
+DTEND:20260903T123000Z
+LOCATION:E239
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217249@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Lesson · F433
+DTSTART:20260904T110000Z
+DTEND:20260904T123000Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a1-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 1 released: Simulation of a crusher stati
+ on
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260914
+DESCRIPTION:Study plan: week 37. Canvas sets no dates.\nsource: studyplan
+ \; verified: no\nhttps://canvas.ltu.se/courses/28715/assignments/216619
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-quiz-w37@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Quiz checkpoint: module 1\, 2
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260914
+DESCRIPTION:Study plan: week 37. Take the module quiz(zes) in Canvas by S
+ unday.\nsource: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/
+ 28715
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215868@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260907T110000Z
+DTEND:20260907T123000Z
+LOCATION:F433
+DESCRIPTION:Cecilia Lund\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215870@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260907T124500Z
+DTEND:20260907T141500Z
+LOCATION:F433
+DESCRIPTION:Carolina Månbro\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a3-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 3 released: GCT laboratory report
+DTSTART:20260907T220000Z
+DTEND:20260907T220000Z
+DESCRIPTION:Canvas unlock date.\nsource: canvas\; verified: yes\nhttps://
+ canvas.ltu.se/courses/28708/assignments/219594
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215362@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E239
+DTSTART:20260908T081500Z
+DTEND:20260908T094500Z
+LOCATION:E239
+DESCRIPTION:Olof Martinsson\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a1-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 1 released: Element-to-mineral conversion
+DTSTART:20260908T220000Z
+DTEND:20260908T220000Z
+DESCRIPTION:Canvas unlock date.\nsource: canvas\; verified: yes\nhttps://
+ canvas.ltu.se/courses/28708/assignments/219592
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215871@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260909T061500Z
+DTEND:20260909T074500Z
+LOCATION:F441a
+DESCRIPTION:Cecilia Lund\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215872@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260909T081500Z
+DTEND:20260909T094500Z
+LOCATION:F441a
+DESCRIPTION:Cecilia Lund\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217241@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20260909T124500Z
+DTEND:20260909T141500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215873@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260910T081500Z
+DTEND:20260910T094500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215874@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20260910T110000Z
+DTEND:20260910T123000Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215875@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20260910T124500Z
+DTEND:20260910T141500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215363@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Computer-lab · F441a
+DTSTART:20260911T110000Z
+DTEND:20260911T123000Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215364@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Computer-lab · F441a
+DTSTART:20260911T124500Z
+DTEND:20260911T141500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a2-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 2 released: Simulation of processing plant
+DTSTART:20260912T220000Z
+DTEND:20260912T220000Z
+DESCRIPTION:Canvas unlock date of the older-format entry.\nsource: canvas
+ \; verified: yes\nhttps://canvas.ltu.se/courses/28708/assignments/216664
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217239@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20260914T081500Z
+DTEND:20260914T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215878@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Laboration · F433
+DTSTART:20260914T110000Z
+DTEND:20260914T123000Z
+LOCATION:F433
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215879@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Laboration · F433
+DTSTART:20260914T124500Z
+DTEND:20260914T141500Z
+LOCATION:F433
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215365@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Computer-lab · F441a
+DTSTART:20260915T061500Z
+DTEND:20260915T074500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215366@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Computer-lab · F441a
+DTSTART:20260915T081500Z
+DTEND:20260915T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215880@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Laboration · F433
+DTSTART:20260916T061500Z
+DTEND:20260916T074500Z
+LOCATION:F433
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215881@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Laboration · F433
+DTSTART:20260916T081500Z
+DTEND:20260916T094500Z
+LOCATION:F433
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217240@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20260916T124500Z
+DTEND:20260916T141500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215882@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260917T061500Z
+DTEND:20260917T074500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215883@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260917T081500Z
+DTEND:20260917T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215367@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Exercise · E239
+DTSTART:20260917T110000Z
+DTEND:20260917T123000Z
+LOCATION:E239
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217254@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Seminar · F433
+DTSTART:20260918T110000Z
+DTEND:20260918T123000Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217255@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Seminar · F433
+DTSTART:20260918T124500Z
+DTEND:20260918T141500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a1-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 1 due in Canvas: Simulation of a crusher 
+ station (report hand-in)
+DTSTART:20260920T215900Z
+DTEND:20260920T215900Z
+LOCATION:F433
+DESCRIPTION:Canvas assignment 216619 is due 2026-09-20T21:59:59Z (read on
+  2026-09-19). The seminar was on Friday 18 September\; the report hand-i
+ n closes on the Sunday\, and submitting it is what completes module 2 an
+ d opens module 3.\nsource: canvas\; verified: yes\nhttps://canvas.ltu.se
+ /courses/28715/assignments/216619
+END:VEVENT
+BEGIN:VEVENT
+UID:mp-lab-circuit-balance-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lab report due in Canvas: Circuit Balance
+DTSTART:20260920T215900Z
+DTEND:20260920T215900Z
+DESCRIPTION:Canvas assignment 219152 (Lab_CircuitBalancing_MP.pdf)\, due 
+ 2026-09-20T21:59:59Z\, read on 2026-09-19\; Kevin has already submitted 
+ it.\nsource: canvas\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:reminder-M7001K-model-windows@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Reminder for Kevin: in MODSIM GUI\, import BatacJig\
+ , DMScircuit\, KlimpelSingleCell\, DistribRateCircuitClosed and WHIMSsim
+ ple\, save each as .mpd in pak_imports\, and take seven screenshots of t
+ heir material tabs and model windows
+DTSTART;VALUE=DATE:20260921
+DTEND;VALUE=DATE:20260922
+DESCRIPTION:Replaced on 2026-09-19 (block 55 of CLAUDE.md). The models wi
+ ndows need no screenshots: the GUI's own catalogue gives every field\, a
+ nd the A2 to A5 guides now name them all. What still needs Kevin's hands
+ : the five imports\, which show how the GUI stores a material of several
+  classes (for the projects of Exercises 9 to 15)\, and seven captures th
+ e catalogue cannot give: BatacJig\, the Grades tab\; DMScircuit\, the fe
+ ed's grade distribution by size\; KlimpelSingleCell\, the Components tab
+  and the KLIM window\; DistribRateCircuitClosed\, the FLTN window\; WHIM
+ Ssimple\, the Components tab and the DOFI window.\nsource: manual\; veri
+ fied: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217250@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Lesson · F433
+DTSTART:20260921T061500Z
+DTEND:20260921T074500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215884@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · D2222
+DTSTART:20260921T110000Z
+DTEND:20260921T123000Z
+LOCATION:D2222
+DESCRIPTION:Jan Rosenkranz\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215369@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E239
+DTSTART:20260922T081500Z
+DTEND:20260922T094500Z
+LOCATION:E239
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215885@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Lecture · F433
+DTSTART:20260923T061500Z
+DTEND:20260923T074500Z
+LOCATION:F433
+DESCRIPTION:Caisa Samuelsson\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217257@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20260923T081500Z
+DTEND:20260923T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215886@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260924T110000Z
+DTEND:20260924T123000Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215887@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20260924T124500Z
+DTEND:20260924T141500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215370@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E239
+DTSTART:20260925T110000Z
+DTEND:20260925T123000Z
+LOCATION:E239
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a1-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 1 due: Element-to-mineral conversion (individ
+ ual\, one Excel file)
+DTSTART:20260927T215900Z
+DTEND:20260927T215900Z
+DESCRIPTION:Canvas due date as read on 2026-09-09 (23:59 local). The grad
+ ing page's rule: one week after the EMC PC-lab. The course said assignme
+ nt dates will be updated. Read again on 2026-09-19: unchanged\, so confi
+ rmed.\nsource: canvas\; verified: yes\nhttps://canvas.ltu.se/courses/287
+ 08/assignments/219592
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7008K-a4-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 4 released: Study trip summary
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20261005
+DESCRIPTION:Study plan: the study trip is in week 40 and the summary is w
+ ritten after it. No Canvas assignment exists yet.\nsource: studyplan\; v
+ erified: no
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215372@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Study visit
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20261002
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215888@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Study trip
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20261002
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a2-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 2 due: Liberation modelling in a grinding cir
+ cuit\, MODSIM (individual\, report of at most 10 pages) [derived]
+DTSTART:20260928T215900Z
+DTEND:20260928T215900Z
+DESCRIPTION:Older-format Canvas entry (0 points\, unlocks 2026-09-13). Th
+ e study plan puts the flowsheet PC-lab in week 39 with the hand-in a wee
+ k later\, so this date may move. Read again on 2026-09-19: unchanged\, s
+ till the older-format entry.\nsource: canvas\; verified: no\nhttps://can
+ vas.ltu.se/courses/28708/assignments/216664
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215373@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Study visit
+DTSTART;VALUE=DATE:20261001
+DTEND;VALUE=DATE:20261003
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215889@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Study trip
+DTSTART;VALUE=DATE:20261001
+DTEND;VALUE=DATE:20261005
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:mp-product-water-balances-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Assignment due in Canvas: Product and Water Balances
+DTSTART:20261001T215900Z
+DTEND:20261001T215900Z
+DESCRIPTION:Canvas assignment 219155 (ProductWaterBalances.pdf and the te
+ mplate ProductWaterBalances-1.xlsx)\, due 2026-10-01T21:59:59Z\, read on
+  2026-09-19. The exercise session for it was on 17 September. Malla's ap
+ unte 01 (nodes and streams) solves it step by step.\nsource: canvas\; ve
+ rified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a3-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 3 due: GCT laboratory report (group\, PDF plu
+ s Excel)
+DTSTART:20261004T215900Z
+DTEND:20261004T215900Z
+DESCRIPTION:Canvas due date as read on 2026-09-09. GCT laboratory session
+ s: Thu 10 Sep 13:00 for project groups A and B\, Wed 16 Sep 08:15 for gr
+ oups C and D (announcement of 2026-09-09). Read again on 2026-09-19: unc
+ hanged\, so confirmed.\nsource: canvas\; verified: yes\nhttps://canvas.l
+ tu.se/courses/28708/assignments/219594
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a2-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 2 released: Simulation of a grinding circ
+ uit
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261012
+DESCRIPTION:Study plan: week 41. Canvas sets no dates.\nsource: studyplan
+ \; verified: no\nhttps://canvas.ltu.se/courses/28715/assignments/216620
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-quiz-w41@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Quiz checkpoint: module 3
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261012
+DESCRIPTION:Study plan: week 41. Take the module quiz(zes) in Canvas by S
+ unday.\nsource: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/
+ 28715
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7008K-a4-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 4 due: Study trip summary (group\, at most 5 
+ pages) [derived]
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261012
+DESCRIPTION:Grading page: one week after the trip returns. No Canvas assi
+ gnment exists yet\; the date will come from Canvas.\nsource: studyplan\;
+  verified: no
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217251@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Lesson · F433
+DTSTART:20261005T061500Z
+DTEND:20261005T074500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215890@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20261005T110000Z
+DTEND:20261005T123000Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215891@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20261005T124500Z
+DTEND:20261005T141500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215375@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Exercise · E232
+DTSTART:20261006T061500Z
+DTEND:20261006T074500Z
+LOCATION:E232
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215374@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E232
+DTSTART:20261006T081500Z
+DTEND:20261006T094500Z
+LOCATION:E232
+DESCRIPTION:Olof Martinsson\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217244@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20261007T081500Z
+DTEND:20261007T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215892@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20261008T110000Z
+DTEND:20261008T123000Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215893@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Computer-lab · F441a
+DTSTART:20261008T124500Z
+DTEND:20261008T141500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217245@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20261009T081500Z
+DTEND:20261009T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215376@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E232
+DTSTART:20261009T110000Z
+DTEND:20261009T123000Z
+LOCATION:E232
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a5-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 5 released: GeoMet project seminar and oral p
+ resentation
+DTSTART:20261011T220000Z
+DTEND:20261011T220000Z
+DESCRIPTION:Canvas unlock date of the older-format entry.\nsource: canvas
+ \; verified: yes\nhttps://canvas.ltu.se/courses/28708/assignments/216667
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217246@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20261012T081500Z
+DTEND:20261012T094500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215894@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20261012T110000Z
+DTEND:20261012T123000Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215895@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20261012T124500Z
+DTEND:20261012T141500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a6-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 6 released: GeoMet project report
+DTSTART:20261012T220000Z
+DTEND:20261012T220000Z
+DESCRIPTION:Canvas unlock date of the older-format entry.\nsource: canvas
+ \; verified: yes\nhttps://canvas.ltu.se/courses/28708/assignments/216668
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215377@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E236
+DTSTART:20261013T061500Z
+DTEND:20261013T074500Z
+LOCATION:E236
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215378@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Lecture · E236
+DTSTART:20261013T081500Z
+DTEND:20261013T094500Z
+LOCATION:E236
+DESCRIPTION:Saeed Chehreh Chelgani\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215896@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20261014T061500Z
+DTEND:20261014T074500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215897@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Project · F441a
+DTSTART:20261014T081500Z
+DTEND:20261014T094500Z
+LOCATION:F441a
+DESCRIPTION:source: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217247@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Computer-lab · F441a
+DTSTART:20261014T124500Z
+DTEND:20261014T141500Z
+LOCATION:F441a
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215899@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Seminar · F433
+DTSTART:20261015T061500Z
+DTEND:20261015T074500Z
+LOCATION:F433
+DESCRIPTION:Cecilia Lund\, Mehdi Parian\nsource: timeedit-seed\; verified
+ : yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215900@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Seminar · F433
+DTSTART:20261015T081500Z
+DTEND:20261015T094500Z
+LOCATION:F433
+DESCRIPTION:Cecilia Lund\, Mehdi Parian\nsource: timeedit-seed\; verified
+ : yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1215379@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[MinProc] Exercise · E236
+DTSTART:20261015T110000Z
+DTEND:20261015T123000Z
+LOCATION:E236
+DESCRIPTION:Sina Shakibania\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217252@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Seminar · F433
+DTSTART:20261016T110000Z
+DTEND:20261016T123000Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:te-1217253@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Seminar · F433
+DTSTART:20261016T124500Z
+DTEND:20261016T141500Z
+LOCATION:F433
+DESCRIPTION:Mehdi Parian\nsource: timeedit-seed\; verified: yes
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a2-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 2 due in Canvas: Simulation of a grinding
+  circuit (report hand-in)
+DTSTART:20261018T215900Z
+DTEND:20261018T215900Z
+LOCATION:F433
+DESCRIPTION:Canvas assignment 216620 is due 2026-10-18T21:59:59Z (read on
+  2026-09-19). The seminar is on Friday 16 October in TimeEdit.\nsource: 
+ canvas\; verified: yes\nhttps://canvas.ltu.se/courses/28715/assignments/
+ 216620
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a5-seminar-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 5 due: GeoMet project seminar and oral presen
+ tation (slides uploaded before your slot) [derived]
+DTSTART:20261019T215900Z
+DTEND:20261019T215900Z
+DESCRIPTION:Older-format Canvas entry (30 points). The seminar itself is 
+ the TimeEdit session in week 42 (Thu 15 Oct in the seed)\; this is the u
+ pload deadline Canvas shows. Read again on 2026-09-19: unchanged\, still
+  the older-format entry.\nsource: canvas\; verified: no\nhttps://canvas.
+ ltu.se/courses/28708/assignments/216667
+END:VEVENT
+BEGIN:VEVENT
+UID:canvas-M7008K-a6-report-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Geomet] Assignment 6 due: GeoMet project report (group\, at most
+  15 pages of main text) [derived]
+DTSTART:20261030T225900Z
+DTEND:20261030T225900Z
+DESCRIPTION:Older-format Canvas entry (50 points). The grading page's rul
+ e: one week after the seminar. Read again on 2026-09-19: unchanged\, sti
+ ll the older-format entry.\nsource: canvas\; verified: no\nhttps://canva
+ s.ltu.se/courses/28708/assignments/216668
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a3-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 3 released: Simulation of a wet gravity c
+ ircuit
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261116
+DESCRIPTION:Study plan: week 46. Canvas sets no dates.\nsource: studyplan
+ \; verified: no\nhttps://canvas.ltu.se/courses/28715/assignments/216621
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-quiz-w46@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Quiz checkpoint: module 4
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261116
+DESCRIPTION:Study plan: week 46. Take the module quiz(zes) in Canvas by S
+ unday.\nsource: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/
+ 28715
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a3-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 3 due: Simulation of a wet gravity circui
+ t (seminar and opposition) [derived]
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261123
+DESCRIPTION:Study plan: week 47. Not confirmed by the teacher yet.\nsourc
+ e: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/28715/assignm
+ ents/216621
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a4-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 4 released: Simulation of a flotation cir
+ cuit
+DTSTART;VALUE=DATE:20261123
+DTEND;VALUE=DATE:20261130
+DESCRIPTION:Study plan: week 48. Canvas sets no dates.\nsource: studyplan
+ \; verified: no\nhttps://canvas.ltu.se/courses/28715/assignments/216622
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a4-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 4 due: Simulation of a flotation circuit 
+ (seminar and opposition) [derived]
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261207
+DESCRIPTION:Study plan: week 49. Not confirmed by the teacher yet.\nsourc
+ e: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/28715/assignm
+ ents/216622
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a5-release@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 5 released: Modelling of a soil remediati
+ on plant
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261214
+DESCRIPTION:Study plan: week 50. Canvas sets no dates.\nsource: studyplan
+ \; verified: no\nhttps://canvas.ltu.se/courses/28715/assignments/216623
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-quiz-w50@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Quiz checkpoint: module 5\, 6
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261214
+DESCRIPTION:Study plan: week 50. Take the module quiz(zes) in Canvas by S
+ unday.\nsource: studyplan\; verified: no\nhttps://canvas.ltu.se/courses/
+ 28715
+END:VEVENT
+BEGIN:VEVENT
+UID:sp-M7001K-a5-due@malla.local
+DTSTAMP:20260927T212144Z
+SUMMARY:[Simulation] Assignment 5 due: report hand-in [derived]
+DTSTART;VALUE=DATE:20270111
+DTEND;VALUE=DATE:20270118
+DESCRIPTION:Study plan: week 2. Not confirmed by the teacher yet.\nsource
+ : studyplan\; verified: no\nhttps://canvas.ltu.se/courses/28715/assignme
+ nts/216623
+END:VEVENT
+END:VCALENDAR
