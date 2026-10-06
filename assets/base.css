@@ -347,6 +347,9 @@ input[type=number], input[type=text] { font: inherit; padding: .45rem .6rem; bor
 .adm { border: 1px solid var(--line); border-left: 4px solid var(--adm, var(--accent)); border-radius: var(--radius-s); padding: .7rem 1rem .2rem; margin: 1rem 0; background: var(--bg-2); }
 .adm-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--adm, var(--accent)); margin-bottom: .3rem; font-weight: 700; }
 .adm-why { --adm: var(--k-release); } .adm-warning { --adm: var(--k-deadline); } .adm-tip { --adm: var(--ok); } .adm-note { --adm: var(--ink-3); }
+.adm-words { --adm: var(--ink-3); } .adm-tryit { --adm: var(--ok); }
+.topic-primer { margin: 1rem 0 1.6rem; padding-bottom: .4rem; border-bottom: 1px solid var(--line); }
+.same-as { color: var(--ink-2); border-left: 3px solid var(--k-quiz); padding-left: .6rem; margin: .5rem 0 .7rem; }
 .step { border: 1px solid var(--line); border-radius: var(--radius); padding: .8rem 1rem; margin: .8rem 0; background: var(--bg-2); display: grid; gap: .4rem; }
 .step-head { display: flex; align-items: center; gap: .7rem; }
 .step-head h4 { margin: 0; }
